@@ -1,0 +1,8 @@
+﻿
+.mode csv
+.import locations.csv locations
+
+Locations is the table
+
+
+
