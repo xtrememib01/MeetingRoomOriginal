@@ -86,8 +86,14 @@
                             <td>Not possible</td>
                             <td>Not possible</td>
                             @endif
-                    </tr>            
-                </tbody>
+                    </tr>   
+                          
+                </tbody> 
+                <tr>
+                    <form action="sendSms.php" method="get">
+                        <button class="btn btn-primary">Send notification</button>
+                    </form>
+                </tr>  
             </table>
             </div>
             </div>
