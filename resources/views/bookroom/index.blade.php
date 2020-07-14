@@ -30,7 +30,7 @@
         <div id='timer.js'></div>
 
         {{-- The entire code below is for the purpose of summary of total rooms created --}}
-
+    {{-- uncomment from line 34 to 88 
          <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
             
         
@@ -73,6 +73,7 @@
             {{-- {{ $bookroom->user_id  }}{{auth()->user()->id}}{{auth()->user()->user_type}}{{auth()->user()->location}}{{$bookroom->user->location}} --}}
         {{-- One to amy relation used for this --}}
 
+{{--  
                          @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
                             <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover">Edit</a></td>
@@ -84,9 +85,11 @@
                                 </form>
                             </td>
                         @endif
+                          
                     </tr>
                     
                     @endforeach
+                     --}}
                     
                 </tbody>
             </table>

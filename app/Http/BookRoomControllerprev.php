@@ -6,7 +6,6 @@ use App\BookRoom;
 use Illuminate\Http\Request;
 use App\Locations;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 
 class BookRoomController extends Controller
@@ -24,6 +23,7 @@ class BookRoomController extends Controller
             $br= BookRoom::all();
             //this creates an array where we intent to store the desired bookroom instance matching the ACCEPT/ AUTH->USER / SUPER data
             $desiredbookroom = array();
+            
             
         foreach($br as $bookroom){
             // {{-- Show the bookings that are 

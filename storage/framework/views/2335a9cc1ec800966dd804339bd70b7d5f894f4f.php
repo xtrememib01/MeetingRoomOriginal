@@ -90,11 +90,16 @@
                           
                 </tbody> 
                 <tr>
-                    <form action="sendSms.php" method="get">
-                        <button class="btn btn-primary">Send notification</button>
-                    </form>
                 </tr>  
             </table>
+        
+            
+            <?php if($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal'): ?>
+                    <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
+                                <button class="btn btn-primary">Send notification</button>
+                            </form>
+            <?php endif; ?>
+    
             </div>
             </div>
         </div>

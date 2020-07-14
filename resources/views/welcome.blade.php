@@ -28,15 +28,15 @@
 <!-- CTA -->
 <div class="container">
     <section id="cta" class="wrapper">
-        <div class="inner text-bold text-left">
-            <h2 class="font-4em">Recent Achievments</h2>
-            <p>In yet another display of its organizational excellence as one the leading Public Sector Undertakings (PSUs) in the country, ONGC bagged four awards in the Governance Now 7th PSU Awards 2020. The annual awards ceremony was held on 19 February 2020 at New Delhi. The four awards conferred to ONGC, under the Maharatna category, are:</p>
-                <ul >
+        <div class="inner text-bold text-left mt-5">
+            <h1 class="font-size: 18em">Recent Achievments</h1>
+            <h5>In yet another display of its organizational excellence as one the leading Public Sector Undertakings (PSUs) in the country, ONGC bagged four awards in the Governance Now 7th PSU Awards 2020. The annual awards ceremony was held on 19 February 2020 at New Delhi. The four awards conferred to ONGC, under the Maharatna category, are:</h5>
+                <h5><ul >
                     
                     <li>Digital PSU</li> 
                     <li>Investment in Start-ups</li> 
-                    <li>CSR & Environment and Sustainability</li> 
-                </ul>    
+                    {{-- <li>CSR & Environment and Sustainability</li> --}}
+                </ul> </h5>   
             
         </div>
     </section>
@@ -62,7 +62,7 @@
                     </div>
                 </section>
                 <section>
-                    <div class="content">
+                    <div class="content ">
                         <header>
                             <span style="font-size:6em"><a href="#" class="isDisabled"><i class="fas fa-server"></i></a></span>
                             <h3>Information Technology</h3>

@@ -90,11 +90,16 @@
                           
                 </tbody> 
                 <tr>
-                    <form action="sendSms.php" method="get">
-                        <button class="btn btn-primary">Send notification</button>
-                    </form>
                 </tr>  
             </table>
+        
+            {{-- Only the normal user who created the meeting will be able to send the notification--}}
+            @if ($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal')
+                    <form action="/sendSms/{{$bookroom->id}}" method="get">
+                                <button class="btn btn-primary">Send notification</button>
+                            </form>
+            @endif
+    
             </div>
             </div>
         </div>

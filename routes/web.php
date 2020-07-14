@@ -39,4 +39,6 @@ Route::get('/communication', function(){
 Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy',function () {
 })->middleware(['auth', 'password.confirm']);
 
+Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
+
 
