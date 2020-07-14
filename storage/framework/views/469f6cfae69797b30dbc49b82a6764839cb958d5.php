@@ -39,6 +39,7 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= <?php echo e($bookrooms->status); ?>>
                 <option value="Pending" class="success">Pending</option>
+                
                 <option value="Accept" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>
@@ -48,7 +49,6 @@
         <button type="submit" class="btn btn-success">Submit</button>
         </form>
         <?php endif; ?>
-        
 </div>
     
 <?php $__env->stopSection(); ?>

@@ -40,6 +40,7 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= {{$bookrooms->status}}>
                 <option value="Pending" class="success">Pending</option>
+                {{-- selected with if condition --}}
                 <option value="Accept" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>
@@ -49,7 +50,6 @@
         <button type="submit" class="btn btn-success">Submit</button>
         </form>
         @endauth
-        
 </div>
     
 @endsection

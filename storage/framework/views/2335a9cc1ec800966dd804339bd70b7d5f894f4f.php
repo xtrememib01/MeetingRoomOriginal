@@ -25,13 +25,13 @@
         <div class="container">
             <div class="card">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
-                <div class="card-body bg-dark">
+                <div class="card-body ">
                     <a href="/bookroom/create">
                         <div class="row">
                             <i class="fa fa-address-book fa-3x col-1 mr-0 pr-0"></i>
-                            <h4 class="card-title col-11 text-white mt-2 ml-0 pl-0 text-white">Book  a conference room</h4>
+                            <h4 class="card-title col-11  mt-2 ml-0 pl-0 ">Book  a conference room</h4>
                         </div>
-                        <p class="card-text text-white">Click on the above icon to book a conference room</p>
+                        <p class="card-text ml-5">Click on the above icon to book a conference room</p>
                     </a>
                 </div>
             </div>
@@ -72,12 +72,12 @@
                         <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
                             
-                            <td><a href= "/bookroom/<?php echo e($bookroom->id); ?>/edit" class="btn btn-success no-hover">Edit</a></td>
+                            <td><a href= "/bookroom/<?php echo e($bookroom->id); ?>/edit" class="btn btn-success no-hover btn-block p-2">Edit</a></td>
                             <td>
                                 <form action="/bookroom/<?php echo e($bookroom->id); ?>" method="POST">
                                     <?php echo csrf_field(); ?>
                                     <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger">Delete</button>
+                                    <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger btn-block p-1 mt-0 pt-0">Delete</button>
                                 </form>
                             </td>
                             

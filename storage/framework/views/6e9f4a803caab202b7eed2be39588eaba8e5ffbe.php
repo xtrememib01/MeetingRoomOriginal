@@ -5,7 +5,7 @@
 
 
 
-
+<div class="container">
 <div class="highlights">
     <section>
         <div class="content ml-3 ">
@@ -72,6 +72,7 @@
             <h3>Miscellaneous</h3>
         </div>
     </section>
+</div>
 </div>
 
 

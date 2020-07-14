@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/','welcome');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
 // Route::get('/home', 'BookRoomController@index')->name('home');
-Route::get('/home', function(){
-    return view('welcome');
-});
+Route::view('/home','welcome');
 
 Route::put('/bookroom', 'BookRoomController@update');
 Route::resource('/bookroom', 'BookRoomController');
@@ -30,14 +30,9 @@ Route::get('/events','BookRoomController@events');
 
 Route::get('/lapupd','BookRoomController@lapupd');
 
+Route::view('/communication','communication.index');
 
-//Route::resource('/communication','CommunicationController');
-Route::get('/communication', function(){
-    return view('communication.index');
-}); 
-
-Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy',function () {
-})->middleware(['auth', 'password.confirm']);
+Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
 
 Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
 
