@@ -2066,6 +2066,8 @@ ul.icons {
   background-position: bottom;
   background-repeat: no-repeat;
   background-size: cover;
+  height: 100%;
+  width: 100%;
   position: relative;
   text-align: center;
   z-index: 1; }

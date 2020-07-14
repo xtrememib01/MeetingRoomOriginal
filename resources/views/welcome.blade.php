@@ -26,7 +26,7 @@
 
 
 <!-- CTA -->
-<div class="container">
+<div >
     <section id="cta" class="wrapper">
         <div class="inner text-bold text-left mt-5">
             <h1 class="font-size: 18em">Recent Achievments</h1>
