@@ -60974,8 +60974,8 @@ var x = setInterval(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/durgesh/Documents/Laravel/Projects/MeetingRoom/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/durgesh/Documents/Laravel/Projects/MeetingRoom/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/durgesh/Documents/Laravel/Projects/MeetingRoomOriginal/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/durgesh/Documents/Laravel/Projects/MeetingRoomOriginal/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
