@@ -265,9 +265,10 @@ class BookRoomController extends Controller
             }
            
             $client = new \GuzzleHttp\Client();
+            // $client->request('GET', '/', ['proxy' => '8.8.8.8']);
             $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='.
-            $contractString.'&text=VC+Scheduled+on+'.
-            $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->agenda.'&remLen=148&charset=UTF-8';
+                $contractString.'&text=VC+Scheduled+on+'.
+                $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->agenda.'&remLen=148&charset=UTF-8';
             //return $url;
             $res = $client->request('GET', $url);
             return redirect ('\bookroom')->with('success','message sent to all the participants');
