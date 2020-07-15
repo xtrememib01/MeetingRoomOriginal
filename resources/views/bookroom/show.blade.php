@@ -94,10 +94,10 @@
             </table>
         
             {{-- Only the normal user who created the meeting will be able to send the notification--}}
-            @if ($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal')
+            @if ($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
                     <form action="/sendSms/{{$bookroom->id}}" method="get">
                                 <button class="btn btn-primary">Send notification</button>
-                            </form>
+                    </form>
             @endif
     
             </div>

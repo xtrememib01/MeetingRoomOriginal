@@ -26,7 +26,8 @@
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
                 @foreach ($locations as $location)
-                    <option>{{$location->location}}</option>
+                {{-- to preselect the bookroom only --}}
+                    <option selected>{{$location->location}}</option>
                 @endforeach         
             </select>
         </div>
@@ -40,7 +41,6 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= {{$bookrooms->status}}>
                 <option value="Pending" class="success">Pending</option>
-                {{-- selected with if condition --}}
                 <option value="Accept" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>

@@ -135,7 +135,8 @@ class BookRoomController extends Controller
 
 
     //  only the super user of the location and the pending request can be edited by the logged in user
-        if(($bookroom->status== 'Pending' && ($bookroom->user_id == auth()->user()->id)) ||
+        // if(($bookroom->status== 'Pending' && ($bookroom->user_id == auth()->user()->id)) ||
+        if(($bookroom->user_id == auth()->user()->id) ||
                 ($bookroom->user->location == auth()->user()->location && auth()->user()->user_type =='Super')){
             return view('bookroom.edit')
                                     ->with('bookrooms',$bookroom)
@@ -242,11 +243,21 @@ class BookRoomController extends Controller
             $contact =array();
             // $userPhone = $bookroom->user;
             // return $userPhone->Phone;
+            $i= 0;
             foreach($bookroom->shifts as $location){
                 //find all the first normal user and store them in an array ; Required to send each of them a text message
-                $contact[] = \App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone;
+                
+                try {
+                    if (\App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone!= null){
+                        $contact[] = \App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone;
+                    }     
+                }
+                catch (\Exception $e) {
+                    
+                }
             }
             
+            // return $contact;
             $contractString = null;
             for($i=0;$i<count($contact);$i++){
                 if ($i==0){ $contractString = $contact[$i];}
@@ -259,9 +270,6 @@ class BookRoomController extends Controller
             $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->agenda.'&remLen=148&charset=UTF-8';
             //return $url;
             $res = $client->request('GET', $url);
-            // echo $res->getStatusCode();
-            // echo $res->getHeader('content-type')[0];
-            // echo $res->getBody();
             return redirect ('\bookroom')->with('success','message sent to all the participants');
         }
 }

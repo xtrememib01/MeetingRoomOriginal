@@ -94,10 +94,10 @@
             </table>
         
             
-            <?php if($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal'): ?>
+            <?php if($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
                     <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
                                 <button class="btn btn-primary">Send notification</button>
-                            </form>
+                    </form>
             <?php endif; ?>
     
             </div>

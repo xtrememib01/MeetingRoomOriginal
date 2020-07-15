@@ -25,7 +25,8 @@
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
                 <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option><?php echo e($location->location); ?></option>
+                
+                    <option selected><?php echo e($location->location); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>         
             </select>
         </div>
@@ -39,7 +40,6 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= <?php echo e($bookrooms->status); ?>>
                 <option value="Pending" class="success">Pending</option>
-                
                 <option value="Accept" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>
