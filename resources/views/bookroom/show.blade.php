@@ -62,6 +62,7 @@
                         <td>
                             @foreach ($bookroom->shifts as $location)
                                 {{$location}}
+                        <br>
                             @endforeach    
                         </td>
                         <td>{{$bookroom->date}}</td>
@@ -69,7 +70,9 @@
                         <td>{{$bookroom->endTime}}</td>
                         <td>{{$bookroom->agenda}}</td>
                         
-                        @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                        {{-- God user can directly edit any meeting  --}}
+                        @if(auth()->user()->user_type == 'God' ||
+                            ($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
                             {{-- (auth()->user()->user_type == 'Super' && auth()->user()->location == $bookroom->user->location)) --}}
                             <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover btn-block p-2">Edit</a></td>
@@ -94,7 +97,8 @@
             </table>
         
             {{-- Only the normal user who created the meeting will be able to send the notification--}}
-            @if ($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
+            @if (auth()->user()->user_type =='God' ||
+                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
                     <form action="/sendSms/{{$bookroom->id}}" method="get">
                                 <button class="btn btn-primary">Send notification</button>
                     </form>

@@ -31,7 +31,8 @@ class BookRoomController extends Controller
             //     2.  the ones created by the user itself 
             //     3. The ones for which a user is super user--}}
             //     {{-- {{$bookroom->user_id}}{{auth()->user()->id}}{{auth()->user()->status}}{{auth()->user()->location}}{{$bookroom->user->location}                        {{$bookroom->user_id}} --}}
-                if($bookroom->status =='Accept' ||     
+                if($bookroom->status =='Accept' ||  
+                    auth()->user()->user_type == 'God' ||   
                     $bookroom->user_id == auth()->user()->id || 
                     ($bookroom->user->location == auth()->user()->location && auth()->user()->user_type =='Super')
                     ){
@@ -136,7 +137,8 @@ class BookRoomController extends Controller
 
     //  only the super user of the location and the pending request can be edited by the logged in user
         // if(($bookroom->status== 'Pending' && ($bookroom->user_id == auth()->user()->id)) ||
-        if(($bookroom->user_id == auth()->user()->id) ||
+        if( auth()->user()->user_type =='God' ||
+            ($bookroom->user_id == auth()->user()->id) ||
                 ($bookroom->user->location == auth()->user()->location && auth()->user()->user_type =='Super')){
             return view('bookroom.edit')
                                     ->with('bookrooms',$bookroom)
@@ -203,12 +205,15 @@ class BookRoomController extends Controller
         $brs= BookRoom::all();
         $event_array = [];
         foreach($brs as $br){
+            if($br->status=='Accept' || auth()->user()->user_type=='God'){
+
             $event_object = [
                 'start' =>$br->date,
                 'title' =>$br->agenda,
                 'url'   => '/bookroom/'.$br->id
             ];
             array_push($event_array,$event_object);
+        }
         }
         return $event_array;
     }
@@ -223,9 +228,11 @@ class BookRoomController extends Controller
             // checks the date for individual locations.
             $queryBuild = Bookroom::where('shifts','like','%'.$location.'%')
                                 ->where('date',$rDt)
-                                ->orWhere(function($query) use($rSt,$rEt){
-                                    $query->where('startTime','>',$rEt)
-                                          ->Where('endTime','<',$rSt);})
+                                // ->orWhere(function($query) use($rSt,$rEt){
+                                //     $query->where('startTime','>', $rEt)
+                                //           ->Where('endTime','<',$rSt);})
+                                ->where('startTime','>', $rEt)
+                                ->Where('endTime','<',$rSt)
                                 ->count();
 
                 if ($queryBuild>0){

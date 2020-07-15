@@ -62,6 +62,7 @@
                             <?php $__currentLoopData = $bookroom->shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php echo e($location); ?>
 
+                        <br>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>    
                         </td>
                         <td><?php echo e($bookroom->date); ?></td>
@@ -69,7 +70,9 @@
                         <td><?php echo e($bookroom->endTime); ?></td>
                         <td><?php echo e($bookroom->agenda); ?></td>
                         
-                        <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                        
+                        <?php if(auth()->user()->user_type == 'God' ||
+                            ($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
                             
                             <td><a href= "/bookroom/<?php echo e($bookroom->id); ?>/edit" class="btn btn-success no-hover btn-block p-2">Edit</a></td>
@@ -94,7 +97,8 @@
             </table>
         
             
-            <?php if($bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
+            <?php if(auth()->user()->user_type =='God' ||
+                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
                     <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
                                 <button class="btn btn-primary">Send notification</button>
                     </form>

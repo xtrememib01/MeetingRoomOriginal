@@ -36,7 +36,7 @@
             <input type="textArea" class="form-control" id="agenda" name="agenda" value= {{$bookrooms->agenda}}>
         </div>
 
-        @if (auth()->user()->user_type =="Super")
+        @if (auth()->user()->user_type =="Super" || auth()->user()->user_type =='God')
         <div class="form-group">
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= {{$bookrooms->status}}>

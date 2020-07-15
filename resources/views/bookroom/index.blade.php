@@ -30,8 +30,9 @@
         <div id='timer.js'></div>
 
         {{-- The entire code below is for the purpose of summary of total rooms created --}}
-    {{-- uncomment from line 34 to 88 
-         <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
+    {{-- {{-- uncomment from line 34 to 88  --}}
+  {{--  --}}
+    <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
             
         
             <h3 class="mt-4 ml-4 text-center">Booked Rooms</h3>
@@ -50,15 +51,18 @@
                     <th class="col"> Delete</th>
                 </tr>
                 </thead>
-        
                 <tbody>
 
                     @foreach ($bookrooms as $bookroom)
+                    @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                    (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
+             
                       <tr>
                         <td>{{$bookroom->conference_details}}</td>
                         <td>
                             @foreach ($bookroom->shifts as $location) 
                                 {{$location}}
+                                <br>
                              @endforeach                                
                         </td>
                         <td>{{$bookroom->date}}</td>
@@ -67,13 +71,15 @@
                         <td>{{$bookroom->agenda}}</td>
                         <td>{{$bookroom->status}}</td>
 
+                        {{--  --}}
+
         {{-- make the field editable when the user
             1. The logged in User is self
             2. When the logged in User is super, and belongs to the location made by the user ofthe location (i.e. Delhi user can crate booking for ahmedabad and the same has to be approved vy the super used of Delhi and not Ahd--}}
             {{-- {{ $bookroom->user_id  }}{{auth()->user()->id}}{{auth()->user()->user_type}}{{auth()->user()->location}}{{$bookroom->user->location}} --}}
         {{-- One to amy relation used for this --}}
+{{--  --}}
 
-{{--  
                          @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
                             <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover">Edit</a></td>
@@ -87,11 +93,12 @@
                         @endif
                           
                     </tr>
-                    
+                    @endif
                     @endforeach
-                     --}}
+                     {{--  --}}
                     
                 </tbody>
+                
             </table>
             </div>
         

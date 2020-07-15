@@ -35,7 +35,7 @@
             <input type="textArea" class="form-control" id="agenda" name="agenda" value= <?php echo e($bookrooms->agenda); ?>>
         </div>
 
-        <?php if(auth()->user()->user_type =="Super"): ?>
+        <?php if(auth()->user()->user_type =="Super" || auth()->user()->user_type =='God'): ?>
         <div class="form-group">
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= <?php echo e($bookrooms->status); ?>>

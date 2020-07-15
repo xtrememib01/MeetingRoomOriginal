@@ -38,3 +38,8 @@ Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(
 
 Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
 
+Route::get('/sendSMS',function(){
+    return '123';
+    return view('sendSMS');
+});
+
