@@ -34,7 +34,8 @@
     <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
             
         
-            <h3 class="mt-4 ml-4 text-center">Booked Rooms</h3>
+        
+        <h3 class="mt-4 ml-4 text-center"><?php echo e(auth()->user()->name); ?>'s Dash Board</h3>
             <div class="col-12" >
             <table class="table table-bordered table-hover table-dark" style="border:0">
                 <thead>
@@ -53,7 +54,9 @@
                 <tbody>
 
                     <?php $__currentLoopData = $bookrooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bookroom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                    
+                    
+                    <?php if(($bookroom->user_id == auth()->user()->id) || 
                     (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
              
                       <tr>
@@ -88,8 +91,14 @@
                                     <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger btn-round">Delete</button>
                                 </form>
                             </td>
+                             
                         <?php endif; ?>
-                          
+                        <?php if(auth()->user()->user_type =='God' ||
+                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
+                            <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
+                                        <button class="btn btn-primary">Send notification</button>
+                            </form>
+                        <?php endif; ?>
                     </tr>
                     <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
