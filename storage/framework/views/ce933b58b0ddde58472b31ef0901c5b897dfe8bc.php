@@ -24,10 +24,11 @@
         <div class="form-group">
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
-                <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 
-                    <option selected><?php echo e($location->location); ?></option>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>         
+                <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option><?php echo e($location->location); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            
             </select>
         </div>
         <div class="form-group">

@@ -25,10 +25,23 @@
         <div class="form-group">
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
+                {{-- to present the entire locations form the locations table--}}
                 @foreach ($locations as $location)
-                {{-- to preselect the bookroom only --}}
-                    <option selected>{{$location->location}}</option>
-                @endforeach         
+                    <option>{{$location->location}}</option>
+                @endforeach
+                                            {{-- to preselect the bookroom only
+                                                @foreach ($bookrooms->shifts as $shifts)
+                                                {{-- this contains the locations selected by bookroom->shifts }
+                                                @if ($shifts == $location->location)
+                                                    <option selected>{{$location->location}}</option>
+                                                    @break
+                                                @else
+                                                    {{-- <option>{{$location->location}}</option> 
+                                                @endif
+                                                
+                                                {{-- <option {{ $shifts == $location->location ? 'selected' : '' }}>{{$location->location}}</option> 
+                                                @endforeach          
+                                            @endforeach --}}
             </select>
         </div>
         <div class="form-group">

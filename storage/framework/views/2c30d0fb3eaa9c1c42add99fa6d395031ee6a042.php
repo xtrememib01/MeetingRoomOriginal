@@ -32,82 +32,86 @@
     
   
     <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
-            
-        
-        
         <h3 class="mt-4 ml-4 text-center"><?php echo e(auth()->user()->name); ?>'s Dash Board</h3>
             <div class="col-12" >
-            <table class="table table-bordered table-hover table-dark" style="border:0">
-                <thead>
+            <table class="table table-bordered table-hover " style="border:0">
+                <thead class="thead-dark">
                 <tr>
-                    <th class="col">Conference Details</th>
-                    <th class="col">Locations</th>
-                    <th class="col">Date</th>
-                    <th class="col">From</th>
-                    <th class="col">To</th>
-                    <th class="col">Agenda</th>
-                    <th class="col"> Status</th>
-                    <th class="col">Edit</th>
-                    <th class="col"> Delete</th>
+                    
+                    <th class="col" style="width:30%">Locations</th>
+                    <th class="col" style="width:12%">Date</th>
+                    <th class="col" style="width:5%">From</th>
+                    <th class="col" style="width:5%">To</th>
+                    <th class="col" style="width:15%">Agenda</th>
+                    <th class="col" style="width:5%"> Status</th>
+                    <th class="col" style="width:20%">Features</th>
+                    
                 </tr>
                 </thead>
                 <tbody>
 
                     <?php $__currentLoopData = $bookrooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bookroom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    
-                    
-                    <?php if(($bookroom->user_id == auth()->user()->id) || 
-                    (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
-             
-                      <tr>
-                        <td><?php echo e($bookroom->conference_details); ?></td>
-                        <td>
-                            <?php $__currentLoopData = $bookroom->shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-                                <?php echo e($location); ?>
-
-                                <br>
-                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                
-                        </td>
-                        <td><?php echo e($bookroom->date); ?></td>
-                        <td><?php echo e($bookroom->startTime); ?></td>
-                        <td><?php echo e($bookroom->endTime); ?></td>
-                        <td><?php echo e($bookroom->agenda); ?></td>
-                        <td><?php echo e($bookroom->status); ?></td>
-
                         
-
-        
-            
-        
-
-
-                         <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
-                            (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
-                            <td><a href= "/bookroom/<?php echo e($bookroom->id); ?>/edit" class="btn btn-success no-hover">Edit</a></td>
-                            <td>
-                                <form action="/bookroom/<?php echo e($bookroom->id); ?>" method="POST">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger btn-round">Delete</button>
-                                </form>
-                            </td>
-                             
-                        <?php endif; ?>
-                        <?php if(auth()->user()->user_type =='God' ||
-                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
-                            <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
-                                        <button class="btn btn-primary">Send notification</button>
-                            </form>
-                        <?php endif; ?>
-                    </tr>
-                    <?php endif; ?>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                     
-                    
-                </tbody>
+                        
+                        <?php if(($bookroom->user_id == auth()->user()->id) || 
+                        (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)): ?>
                 
-            </table>
-            </div>
+                            <tr>
+                                
+                                <td>
+                                    <?php $__currentLoopData = $bookroom->shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
+                                        <?php echo e($location); ?><br>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                
+                                </td>
+                                <td><?php echo e($bookroom->date); ?></td>
+                                <td><?php echo e($bookroom->startTime); ?></td>
+                                <td><?php echo e($bookroom->endTime); ?></td>
+                                <td><?php echo e($bookroom->agenda); ?></td>
+                                <td><?php echo e($bookroom->status); ?></td>
+
+                
+        
+
+                                
+                                <td>
+                                    <div class="d-inline-flex">
+                                        <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                                            (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
+                                            auth()->user()->user_type=='God'): ?>
+                                
+                                            <button class="btn btn-success" style="border:none; margin-right:1em; width:5em; height:70%;">
+                                                <a class="text-white" href= "/bookroom/<?php echo e($bookroom->id); ?>/edit" style="height:50%;">Edit</a>
+                                            </button>
+                                            
+                                                <form action="/bookroom/<?php echo e($bookroom->id); ?>" method="POST">
+                                                    <?php echo csrf_field(); ?>
+                                                    <?php echo method_field('DELETE'); ?>
+                                                    <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger text-white" 
+                                                    style="border:none; margin-right:1em; width:5em; height:100%; " >Delete
+                                                    </button>
+                                                </form>
+                                        <?php endif; ?>
+                                    
+                                        <?php if(auth()->user()->user_type =='God' ||
+                                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
+                                        
+                                            <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
+                                                    <button class="btn btn-primary text-white"
+                                                    style="border:none; margin-right:1em; width:5em; height:100%;">Invite
+                                                    </button>
+                                            </form>
+                                        <?php endif; ?>     
+                                    </div>
+                                </td>                       
+                            </tr>
+                        <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                
+                    
+            </tbody>
+                
+        </table>
+    </div>
         
     </div>
     

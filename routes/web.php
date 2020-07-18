@@ -34,7 +34,7 @@ Route::resource('/bookroom', 'BookRoomController');
 
 Route::get('/events','BookRoomController@events');
 
-Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
+// Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
 
 Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
 
