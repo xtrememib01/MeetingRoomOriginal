@@ -10,7 +10,6 @@ var x = setInterval(function() {
   var now = new Date().getTime();
     
   // Find the distance between now and the count down date
-
   var distance = Date.parse(fectchedDateandTIme) - now;
     
   // Time calculations for days, hours, minutes and seconds
@@ -20,12 +19,8 @@ var x = setInterval(function() {
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     
   // Output the result in an element with id="demo"
-  document.getElementById("timeLeft").innerHTML = days + " DAYS " + hours + " HOURS ";
-  // + minutes + "m " + seconds + "s ";
-    
-  // If the count down is over, write some text 
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("demo").innerHTML = "EXPIRED";
-  }
+  if(days<0) {
+    document.getElementById("timeLeft").innerHTML= "Meeting is alerady over";}
+  else{
+  document.getElementById("timeLeft").innerHTML = days + " DAYS " + hours + " HOURS ";}// + minutes + "m " + seconds + "s ";
 }, 1000);

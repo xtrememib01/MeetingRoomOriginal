@@ -34,8 +34,17 @@
         </div>
         <div class="form-group">
             <label for="agenda">Agenda</label>
-            <input type="textArea" class="form-control" id="agenda" name="agenda">
+            {{-- <input type="textArea" class="form-control" id="agenda" name="agenda" rows="5"> --}}
+            <textarea class="form-control" id="agenda" name="agenda" rows="5"></textarea>
+
         </div>
+
+        <!--Material textarea-->
+        {{-- <div class="md-form mb-4 pink-textarea active-pink-textarea">
+            <label for="agenda">Agenda</label>
+            <textarea rows="10" id="agenda" name="agenda" class="md-textarea form-control"></textarea>
+        </div> --}}
+
         <button type="submit" class="btn btn-success width:100%">Submit</button>
         </form>
         @endauth

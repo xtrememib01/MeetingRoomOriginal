@@ -33,8 +33,14 @@
         </div>
         <div class="form-group">
             <label for="agenda">Agenda</label>
-            <input type="textArea" class="form-control" id="agenda" name="agenda">
+            
+            <textarea class="form-control" id="agenda" name="agenda" rows="5"></textarea>
+
         </div>
+
+        <!--Material textarea-->
+        
+
         <button type="submit" class="btn btn-success width:100%">Submit</button>
         </form>
         <?php endif; ?>

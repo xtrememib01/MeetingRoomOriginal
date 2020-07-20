@@ -26,7 +26,11 @@
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
                 {{-- to present the entire locations form the locations table--}}
-                @foreach ($locations as $location)
+                
+                @foreach ($locations as $location)    
+                    {{-- @do($bookrooms->shifts != $location->location)
+                                <option selected>{{$location->location}}</option>
+                    @endwhile --}}
                     <option>{{$location->location}}</option>
                 @endforeach
                                             {{-- to preselect the bookroom only
@@ -46,7 +50,8 @@
         </div>
         <div class="form-group">
             <label for="agenda">Agenda</label>
-            <input type="textArea" class="form-control" id="agenda" name="agenda" value= {{$bookrooms->agenda}}>
+            <textarea class="form-control" id="agenda" name="agenda"  rows="5"> {{$bookrooms->agenda}}</textarea>
+            {{-- <input type="textArea" class="form-control" id="agenda" name="agenda" value= {{$bookrooms->agenda}}> --}}
         </div>
 
         @if (auth()->user()->user_type =="Super" || auth()->user()->user_type =='God')

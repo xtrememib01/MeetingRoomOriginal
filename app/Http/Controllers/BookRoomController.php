@@ -72,6 +72,7 @@ class BookRoomController extends Controller
             'endTime'               => 'required',
             'locations'             => 'required',
             'agenda'                => 'required'
+            // 'textArea'              => 'required'
         ]);
         
         //Create an Instance of BookRoom Model
@@ -105,7 +106,13 @@ class BookRoomController extends Controller
     $brr->shifts = $request->locations;
     $brr->agenda = $request->agenda;
     $brr->user_id = auth()->user()->id; 
-    $brr->status = 'pending';
+    
+    if(auth()->user()->user_type == 'God'){
+        $brr->status = 'Accept';    
+    }
+    else{$brr->status = 'pending';}
+    
+    $brr->textArea = $request->textArea; 
     $brr->save();
     return redirect ('\bookroom')->with('success','Entry created');
 }
@@ -206,10 +213,11 @@ class BookRoomController extends Controller
         $event_array = [];
         foreach($brs as $br){
             if($br->status=='Accept' || auth()->user()->user_type=='God'){
-
             $event_object = [
                 'start' =>$br->date,
-                'title' =>$br->agenda,
+                'title' =>$br->conference_details,
+                // 'title' =>'<?php echo <span style="color:red"> )'.$br->agenda.' </span>,
+                // 'title' =>$br->agenda.'   ('.$br->startTime.' to '.$br->endTime.')',
                 'url'   => '/bookroom/'.$br->id
             ];
             array_push($event_array,$event_object);
@@ -275,7 +283,7 @@ class BookRoomController extends Controller
             // $client->request('GET', '/', ['proxy' => '8.8.8.8']);
             $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='.
                 $contractString.'&text=VC+Scheduled+on+'.
-                $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->agenda.'&remLen=148&charset=UTF-8';
+                $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->conference_details.'&remLen=148&charset=UTF-8';
             //return $url;
             $res = $client->request('GET', $url);
             return redirect ('\bookroom')->with('success','message sent to all the participants');

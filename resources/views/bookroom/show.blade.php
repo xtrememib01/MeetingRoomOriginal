@@ -44,21 +44,22 @@
         
             <h3 class="mt-4 text-center">Booked Rooms</h3>
             <div class="col-12" >
-            <table class="table table-bordered table-hover table-dark" style="border:0">
-                <thead>
-                        <th>Conference Details</th>
-                        <th class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 mt-2">Locations</th>
+            <table class="table table-bordered table-hover " style="border:0">
+                <thead class="thead-dark">
+                        {{-- <th>Conference Details</th> --}}
+                        <th style="width:35%" class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 mt-2">Locations</th>
                         <th> Date</th>
                         <th>From</th>
                         <th>To</th>
-                        <th>Agenda</th>
-                        <th>Edit</th>
-                        <th> Delete</th>
+                        <th style="width:15%">Agenda</th>
+                        <th>Features</th>
+                        {{-- <th>Edit</th>
+                        <th> Delete</th> --}}
                 </thead>
         
                 <tbody>
                         <tr>
-                        <td>{{$bookroom->conference_details}}</td>
+                        {{-- <td>{{$bookroom->conference_details}}</td> --}}
                         <td>
                             @foreach ($bookroom->shifts as $location)
                                 {{$location}}
@@ -70,39 +71,43 @@
                         <td>{{$bookroom->endTime}}</td>
                         <td>{{$bookroom->agenda}}</td>
                         
-                        {{-- God user can directly edit any meeting  --}}
-                        @if(auth()->user()->user_type == 'God' ||
-                            ($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
-                            (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
-                            {{-- (auth()->user()->user_type == 'Super' && auth()->user()->location == $bookroom->user->location)) --}}
-                            <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover btn-block p-2">Edit</a></td>
-                            <td>
-                                <form action="/bookroom/{{$bookroom->id}}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger btn-block p-1 mt-0 pt-0">Delete</button>
-                                </form>
-                            </td>
+                        <td>
+                            <div class="d-inline-flex">
+                                @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                                    (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
+                                    auth()->user()->user_type=='God')
+                        
+                                    <button class="btn btn-success" style="border:none; margin-right:1em; width:5em; height:70%;">
+                                        <a class="text-white" href= "/bookroom/{{$bookroom->id}}/edit" style="height:50%;">Edit</a>
+                                    </button>
+                                    
+                                        <form action="/bookroom/{{$bookroom->id}}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger text-white" 
+                                            style="border:none; margin-right:1em; width:5em; height:100%; " >Delete
+                                            </button>
+                                        </form>
+                                @endif
                             
-
-                            @else
-                            <td>Not possible</td>
-                            <td>Not possible</td>
-                            @endif
-                    </tr>   
-                          
+                                @if (auth()->user()->user_type =='God' ||
+                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
+                                
+                                    <form action="/sendSms/{{$bookroom->id}}" method="get">
+                                            <button class="btn btn-primary text-white"
+                                            style="border:none; margin-right:1em; width:5em; height:100%;">Invite
+                                            </button>
+                                    </form>
+                                @endif     
+                            </div>
+                        </td>       
+                    </tr>                             
                 </tbody> 
                 <tr>
                 </tr>  
             </table>
         
-            {{-- Only the normal user who created the meeting will be able to send the notification--}}
-            @if (auth()->user()->user_type =='God' ||
-                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
-                    <form action="/sendSms/{{$bookroom->id}}" method="get">
-                                <button class="btn btn-primary">Send notification</button>
-                    </form>
-            @endif
+           
     
             </div>
             </div>

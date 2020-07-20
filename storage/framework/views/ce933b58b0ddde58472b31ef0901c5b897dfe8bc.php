@@ -25,7 +25,9 @@
             <label for="Select Location">Select Location</label>
             <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
                 
-                <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                
+                <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>    
+                    
                     <option><?php echo e($location->location); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             
@@ -33,7 +35,8 @@
         </div>
         <div class="form-group">
             <label for="agenda">Agenda</label>
-            <input type="textArea" class="form-control" id="agenda" name="agenda" value= <?php echo e($bookrooms->agenda); ?>>
+            <textarea class="form-control" id="agenda" name="agenda"  rows="5"> <?php echo e($bookrooms->agenda); ?></textarea>
+            
         </div>
 
         <?php if(auth()->user()->user_type =="Super" || auth()->user()->user_type =='God'): ?>
