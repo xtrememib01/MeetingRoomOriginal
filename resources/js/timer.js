@@ -20,7 +20,7 @@ var x = setInterval(function() {
     
   // Output the result in an element with id="demo"
   if(days<0) {
-    document.getElementById("timeLeft").innerHTML= "Meeting is alerady over";}
+    document.getElementById("timeLeft").innerHTML= "Meeting is already over";}
   else{
   document.getElementById("timeLeft").innerHTML = days + " DAYS " + hours + " HOURS ";}// + minutes + "m " + seconds + "s ";
 }, 1000);
