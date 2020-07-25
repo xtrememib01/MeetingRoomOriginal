@@ -90,7 +90,7 @@
                                 <?php endif; ?>
                             
                                 <?php if(auth()->user()->user_type =='God' ||
-                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept'): ?>
+                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted'): ?>
                                 
                                     <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
                                             <button class="btn btn-primary text-white"

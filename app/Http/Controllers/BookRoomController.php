@@ -31,7 +31,7 @@ class BookRoomController extends Controller
             //     2.  the ones created by the user itself 
             //     3. The ones for which a user is super user--}}
             //     {{-- {{$bookroom->user_id}}{{auth()->user()->id}}{{auth()->user()->status}}{{auth()->user()->location}}{{$bookroom->user->location}                        {{$bookroom->user_id}} --}}
-                if($bookroom->status =='Accept' ||  
+                if($bookroom->status =='Accepted' ||  
                     auth()->user()->user_type == 'God' ||   
                     $bookroom->user_id == auth()->user()->id || 
                     ($bookroom->user->location == auth()->user()->location && auth()->user()->user_type =='Super')
@@ -108,7 +108,7 @@ class BookRoomController extends Controller
     $brr->user_id = auth()->user()->id; 
     
     if(auth()->user()->user_type == 'God'){
-        $brr->status = 'Accept';    
+        $brr->status = 'Accepted';    
     }
     else{$brr->status = 'pending';}
     
@@ -147,8 +147,9 @@ class BookRoomController extends Controller
         if( auth()->user()->user_type =='God' ||
             ($bookroom->user_id == auth()->user()->id) ||
                 ($bookroom->user->location == auth()->user()->location && auth()->user()->user_type =='Super')){
-            return view('bookroom.edit')
+                    return view('bookroom.edit')
                                     ->with('bookrooms',$bookroom)
+                                    ->with('locationAray',$bookroom->shifts)
                                     ->with('locations',Locations::all());
         }
         else {
@@ -212,7 +213,7 @@ class BookRoomController extends Controller
         $brs= BookRoom::all();
         $event_array = [];
         foreach($brs as $br){
-            if($br->status=='Accept' || auth()->user()->user_type=='God'){
+            if($br->status=='Accepted' || auth()->user()->user_type=='God'){
             $event_object = [
                 'start' =>$br->date,
                 'title' =>$br->conference_details,

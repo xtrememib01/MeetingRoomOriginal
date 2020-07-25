@@ -11,7 +11,7 @@
         @csrf
         <div class="form-group">
             <label for="conference_details">Conference details</label>
-            <input type="text" class="form-control" id="conference_details" name="conference_details" >
+            <input type="text" class="form-control" id="conference_details" name="conference_details" value={{old('conference_details')}}>
         </div>
         <div class="form-row ">
             <label for="date" class="col-4">Date</label>
@@ -19,31 +19,27 @@
             <label for="endTime" class="col-4">End Time</label>
         </div>   
         <div class="form-row mr-3" style="mr-3">
-            <input type="date" class="form-control col-4" style="width:10em" id="date" name="date" >
-            <input type="time" class="form-control col-4" id="startTime" name="startTime" >
-            <input type="time" class="form-control col-4" id="endTime" name="endTime" >
-            
+            <input type="date" class="form-control col-4" style="width:10em" id="date" name="date" value={{old('date')}}>
+            <input type="time" class="form-control col-4" id="startTime" name="startTime" value={{old('startTime')}}>
+            <input type="time" class="form-control col-4" id="endTime" name="endTime" value={{old('endTime')}}>
         </div>
-        <div class="form-group">
-            <label for="Select Location">Select Location</label>
-            <select multiple class="form-control" style="min-height:200px" name="locations[]" id="exampleFormControlSelect1">
-                @foreach ($locations as $location)
-                <option>{{$location->location}}</option>
-                @endforeach
-            </select>
+
+        <br>
+        <label for="Select Location">Select Location</label>
+        <br>
+        <div class="overflow-auto form-group" style="height:20em">
+            @foreach ($locations as $location)    
+                <input id ="{{$location->location}}" type="checkbox" name ="locations[]" value="{{$location->location}}">
+                <label for="{{$location->location}}" >{{$location->location}}</label><br>
+            @endforeach
+
         </div>
         <div class="form-group">
             <label for="agenda">Agenda</label>
             {{-- <input type="textArea" class="form-control" id="agenda" name="agenda" rows="5"> --}}
-            <textarea class="form-control" id="agenda" name="agenda" rows="5"></textarea>
+        <textarea class="form-control" id="agenda" name="agenda" rows="5">{{old('agenda')}}</textarea>
 
         </div>
-
-        <!--Material textarea-->
-        {{-- <div class="md-form mb-4 pink-textarea active-pink-textarea">
-            <label for="agenda">Agenda</label>
-            <textarea rows="10" id="agenda" name="agenda" class="md-textarea form-control"></textarea>
-        </div> --}}
 
         <button type="submit" class="btn btn-success width:100%">Submit</button>
         </form>

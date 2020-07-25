@@ -1,4 +1,5 @@
 <?php $__env->startSection('content'); ?>
+<?php echo $__env->make('inc.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">

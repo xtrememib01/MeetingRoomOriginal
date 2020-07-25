@@ -91,7 +91,8 @@
                                 @endif
                             
                                 @if (auth()->user()->user_type =='God' ||
-                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
+                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == '
+                                    ')
                                 
                                     <form action="/sendSms/{{$bookroom->id}}" method="get">
                                             <button class="btn btn-primary text-white"

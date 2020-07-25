@@ -6,8 +6,6 @@
             <h1>Calendar view</h1>
         </div>
         {{-- <div id="timer.js"></div> --}}
-
-        
         
         <div class="container">
             <div class="card">
@@ -83,7 +81,7 @@
                                     <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover">Edit</a></td> --}}
                                 <td>
                                     <div class="d-inline-flex">
-                                        @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                                        @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accepted') || 
                                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
                                             auth()->user()->user_type=='God')
                                 
@@ -101,7 +99,7 @@
                                         @endif
                                     
                                         @if (auth()->user()->user_type =='God' ||
-                                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accept')
+                                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted')
                                         
                                             <form action="/sendSms/{{$bookroom->id}}" method="get">
                                                     <button class="btn btn-primary text-white"

@@ -47,31 +47,43 @@ class LoginController extends Controller
  
     }
 
-    
 
     public function username(){
         return 'cpf';
     }
 
     public function attemptLogin(Request $request) {
+        /* find if the cpf of the user trying to log in matches with the CPF of the user existing in the tables
+       1.  if the user exist -> log in and save the data to the database in the user table
+       2.  if doesn't exist  -> redirect to the login page with the message unauthorised and
+       3.  in case of wrong userid and pass authenticate scaffolding should take care on its own
+        */
+        $localUser = User::where('cpf', $request->cpf)->first();
         
-        $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
-        $userDn = $ldapUser->distinguishedname[0];
-
-        // // iterates through all the users to check if the user exists
-        // $users = User::all();
-        // foreach ($users as $user) {
-        //     if (User::where('cpf',$request->cpf)->firstOrFail() == $user->cpf)
-        //     //do something and then break
-        //     break;
+        if ($localUser){
+            $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
+            $userDn = $ldapUser->distinguishedname[0];
+            $this->saveUserData( $request);
+            if(Adldap::auth()->attempt($userDn, $request->password)) {
+                Auth::login($localUser);
+                return true;
+            }
         // }
-        
-
-        if(Adldap::auth()->attempt($userDn, $request->password)) {
-            $localUser = User::where('cpf', $request->cpf)->firstOrFail();
-            Auth::login($localUser);
-            return true;
-        }
             return false;
+        }
+    }
+
+    public function saveUserData(Request $request ){
+        $AdldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
+    
+        $user = User::where('cpf', $request->cpf)->first();
+        /*Adding the number to the local database
+        $user->update(['Phone' => $AdldapUser->mobile[0]]); Output ->09968282814
+        Wheres for sending the SMS, mobile number has to be 9968282814
+        */
+        $user->update(['Phone' => substr($AdldapUser->mobile[0],1)]);
+
+        $user->update(['email' => $AdldapUser->mail[0]]);
+        $user->save();
     }
 }

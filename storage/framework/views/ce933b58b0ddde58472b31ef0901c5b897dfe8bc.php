@@ -1,3 +1,5 @@
+<?php $Locations = app('App\Locations'); ?>
+
 <?php $__env->startSection('content'); ?>
 <?php echo $__env->make('inc.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <div class="container">    
@@ -21,16 +23,22 @@
             <input type="time" class="form-control col-4" id="startTime" name="startTime" value=<?php echo e($bookrooms->startTime); ?> >
             <input type="time" class="form-control col-4" id="endTime" name="endTime" value=<?php echo e($bookrooms->endTime); ?>>
         </div>
-        <div class="form-group">
-            <label for="Select Location">Select Location</label>
-            <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
+
+        <br>
+        <label for="Select Location">Select Location</label>
+        <br>
+        <div class="overflow-auto form-group" style="height:20em">    
+            
                 
                 
                 <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>    
-                    
-                    <option><?php echo e($location->location); ?></option>
+                
+                <input id ="<?php echo e($location->location); ?>" type="checkbox" name ="locations[]" value="<?php echo e($location->location); ?>" 
+                    <?php if(in_array($location->location,$locationAray)): ?>checked
+                            <?php endif; ?>>     
+                <label for="<?php echo e($location->location); ?>" ><?php echo e($location->location); ?></label><br>
+                
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            
             </select>
         </div>
         <div class="form-group">
@@ -44,7 +52,7 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= <?php echo e($bookrooms->status); ?>>
                 <option value="Pending" class="success">Pending</option>
-                <option value="Accept" class="success">Accept</option>
+                <option value="Accepted" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>
         </div>

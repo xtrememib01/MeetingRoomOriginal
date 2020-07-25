@@ -1,3 +1,4 @@
+@inject('Locations', 'App\Locations')
 @extends('layouts.app')
 @section('content')
 @include('inc.messages')
@@ -22,30 +23,22 @@
             <input type="time" class="form-control col-4" id="startTime" name="startTime" value={{$bookrooms->startTime}} >
             <input type="time" class="form-control col-4" id="endTime" name="endTime" value={{$bookrooms->endTime}}>
         </div>
-        <div class="form-group">
-            <label for="Select Location">Select Location</label>
-            <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1">
+
+        <br>
+        <label for="Select Location">Select Location</label>
+        <br>
+        <div class="overflow-auto form-group" style="height:20em">    
+            {{-- <select multiple class="form-control" style="min-height:200px"name="locations[]" id="exampleFormControlSelect1"> --}}
                 {{-- to present the entire locations form the locations table--}}
                 
                 @foreach ($locations as $location)    
-                    {{-- @do($bookrooms->shifts != $location->location)
-                                <option selected>{{$location->location}}</option>
-                    @endwhile --}}
-                    <option>{{$location->location}}</option>
+                {{-- diffeent ids are required otherwise they cant bechecked together --}}
+                <input id ="{{$location->location}}" type="checkbox" name ="locations[]" value="{{$location->location}}" 
+                    @if (in_array($location->location,$locationAray))checked
+                            @endif>     
+                <label for="{{$location->location}}" >{{$location->location}}</label><br>
+                
                 @endforeach
-                                            {{-- to preselect the bookroom only
-                                                @foreach ($bookrooms->shifts as $shifts)
-                                                {{-- this contains the locations selected by bookroom->shifts }
-                                                @if ($shifts == $location->location)
-                                                    <option selected>{{$location->location}}</option>
-                                                    @break
-                                                @else
-                                                    {{-- <option>{{$location->location}}</option> 
-                                                @endif
-                                                
-                                                {{-- <option {{ $shifts == $location->location ? 'selected' : '' }}>{{$location->location}}</option> 
-                                                @endforeach          
-                                            @endforeach --}}
             </select>
         </div>
         <div class="form-group">
@@ -59,7 +52,7 @@
             <label for="status">Agenda</label>
             <select id ="status"  type="text" class="form-control" id="status" name="status" value= {{$bookrooms->status}}>
                 <option value="Pending" class="success">Pending</option>
-                <option value="Accept" class="success">Accept</option>
+                <option value="Accepted" class="success">Accept</option>
                 <option value="Reject" class="danger" selected >Reject</option>
             </select>
         </div>
