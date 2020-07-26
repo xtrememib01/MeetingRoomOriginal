@@ -36,13 +36,15 @@
                 <thead class="thead-dark">
                 <tr>
                     
-                    <th class="col" style="width:30%">Locations</th>
+                    <th class="col" style="width:24%">Locations</th>
                     <th class="col" style="width:12%">Date</th>
-                    <th class="col" style="width:5%">From</th>
-                    <th class="col" style="width:5%">To</th>
-                    <th class="col" style="width:15%">Agenda</th>
-                    <th class="col" style="width:5%"> Status</th>
-                    <th class="col" style="width:20%">Features</th>
+                    <th class="col" style="width:4%">From</th>
+                    
+                    
+                    <th class="col" style="width:28%">Agenda</th>
+                    <th class="col" style="width:3%"> Status</th>
+                    <th class="col" style="width:10%">Features</th>
+                    <th class="col" style="width:10%">Created by</th>
                     
                 </tr>
                 </thead>
@@ -58,12 +60,12 @@
                                 
                                 <td>
                                     <?php $__currentLoopData = $bookroom->shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-                                        <?php echo e($location); ?><br>
+                                        <?php echo e($location); ?><br><br>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                                
                                 </td>
                                 <td><?php echo e($bookroom->date); ?></td>
                                 <td><?php echo e($bookroom->startTime); ?></td>
-                                <td><?php echo e($bookroom->endTime); ?></td>
+                                
                                 <td><?php echo e($bookroom->agenda); ?></td>
                                 <td><?php echo e($bookroom->status); ?></td>
 
@@ -100,7 +102,8 @@
                                             </form>
                                         <?php endif; ?>     
                                     </div>
-                                </td>                       
+                                </td> 
+                                <td><?php echo e($bookroom->user->name); ?></td>                         
                             </tr>
                         <?php endif; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -52,6 +52,7 @@
                         <th>To</th>
                         <th style="width:15%">Agenda</th>
                         <th>Features</th>
+                        <th>Create by</th>
                         
                 </thead>
         
@@ -72,7 +73,7 @@
                         
                         <td>
                             <div class="d-inline-flex">
-                                <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                                <?php if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accepted') || 
                                     (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
                                     auth()->user()->user_type=='God'): ?>
                         
@@ -90,7 +91,8 @@
                                 <?php endif; ?>
                             
                                 <?php if(auth()->user()->user_type =='God' ||
-                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted'): ?>
+                                    $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == '
+                                    '): ?>
                                 
                                     <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
                                             <button class="btn btn-primary text-white"
@@ -99,7 +101,8 @@
                                     </form>
                                 <?php endif; ?>     
                             </div>
-                        </td>       
+                        </td>    
+                        <td><?php echo e($bookroom->user->name); ?></td>   
                     </tr>                             
                 </tbody> 
                 <tr>

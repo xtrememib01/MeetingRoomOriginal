@@ -82,7 +82,6 @@ class LoginController extends Controller
         Wheres for sending the SMS, mobile number has to be 9968282814
         */
         $user->update(['Phone' => substr($AdldapUser->mobile[0],1)]);
-
         $user->update(['email' => $AdldapUser->mail[0]]);
         $user->save();
     }

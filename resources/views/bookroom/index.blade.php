@@ -37,13 +37,15 @@
                 <thead class="thead-dark">
                 <tr>
                     {{-- <th class="col" style="width:10%">Conference Details</th> --}}
-                    <th class="col" style="width:30%">Locations</th>
+                    <th class="col" style="width:24%">Locations</th>
                     <th class="col" style="width:12%">Date</th>
-                    <th class="col" style="width:5%">From</th>
-                    <th class="col" style="width:5%">To</th>
-                    <th class="col" style="width:15%">Agenda</th>
-                    <th class="col" style="width:5%"> Status</th>
-                    <th class="col" style="width:20%">Features</th>
+                    <th class="col" style="width:4%">From</th>
+                    {{-- To is taking lot of space and my not be relevant --}}
+                    {{-- <th class="col" style="width:4%">To</th> --}}
+                    <th class="col" style="width:28%">Agenda</th>
+                    <th class="col" style="width:3%"> Status</th>
+                    <th class="col" style="width:10%">Features</th>
+                    <th class="col" style="width:10%">Created by</th>
                     {{-- <th class="col"> Delete</th>
                     <th class="col"> Send notification</th> --}}
                 </tr>
@@ -60,12 +62,12 @@
                                 {{-- <td >{{$bookroom->conference_details}}</td> --}}
                                 <td>
                                     @foreach ($bookroom->shifts as $location) 
-                                        {{$location}}<br>
+                                        {{$location}}<br><br>
                                     @endforeach                                
                                 </td>
                                 <td>{{$bookroom->date}}</td>
                                 <td>{{$bookroom->startTime}}</td>
-                                <td>{{$bookroom->endTime}}</td>
+                                {{-- <td>{{$bookroom->endTime}}</td> --}}
                                 <td>{{$bookroom->agenda}}</td>
                                 <td>{{$bookroom->status}}</td>
 
@@ -108,7 +110,8 @@
                                             </form>
                                         @endif     
                                     </div>
-                                </td>                       
+                                </td> 
+                                <td>{{$bookroom->user->name}}</td>                         
                             </tr>
                         @endif
                 @endforeach

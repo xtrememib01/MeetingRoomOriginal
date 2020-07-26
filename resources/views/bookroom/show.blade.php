@@ -53,6 +53,7 @@
                         <th>To</th>
                         <th style="width:15%">Agenda</th>
                         <th>Features</th>
+                        <th>Create by</th>
                         {{-- <th>Edit</th>
                         <th> Delete</th> --}}
                 </thead>
@@ -73,7 +74,7 @@
                         
                         <td>
                             <div class="d-inline-flex">
-                                @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
+                                @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accepted') || 
                                     (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
                                     auth()->user()->user_type=='God')
                         
@@ -101,7 +102,8 @@
                                     </form>
                                 @endif     
                             </div>
-                        </td>       
+                        </td>    
+                        <td>{{$bookroom->user->name}}</td>   
                     </tr>                             
                 </tbody> 
                 <tr>

@@ -23,6 +23,8 @@ class CreateBookRoomsTable extends Migration
             //$table->string('shifts')->nullable();
             $table->string('shifts');
             $table->text('agenda');
+            $table->integer('user_id')->nullable();
+            $table->char('status')->nullable();
             $table->timestamps();
         });
     }
