@@ -58,19 +58,35 @@ class LoginController extends Controller
        2.  if doesn't exist  -> redirect to the login page with the message unauthorised and
        3.  in case of wrong userid and pass authenticate scaffolding should take care on its own
         */
-        $localUser = User::where('cpf', $request->cpf)->first();
+        // $localUser = User::where('cpf', $request->cpf)->first();
         
-        if ($localUser){
+        // if ($localUser){
+        //     $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
+        //     $userDn = $ldapUser->distinguishedname[0];
+        //     $this->saveUserData( $request);
+        //     if(Adldap::auth()->attempt($userDn, $request->password)) {
+        //         Auth::login($localUser);
+        //         return true;
+        //     }
+        // // }
+        //     return false;
+        // }
+
             $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
+    
+            if($ldapUser){
+                $this->saveUserData( $request);
+            }
             $userDn = $ldapUser->distinguishedname[0];
-            $this->saveUserData( $request);
+            $localUser = User::where('cpf', $request->cpf)->first();
+            
             if(Adldap::auth()->attempt($userDn, $request->password)) {
                 Auth::login($localUser);
                 return true;
             }
         // }
             return false;
-        }
+        
     }
 
     public function saveUserData(Request $request ){
@@ -81,8 +97,21 @@ class LoginController extends Controller
         $user->update(['Phone' => $AdldapUser->mobile[0]]); Output ->09968282814
         Wheres for sending the SMS, mobile number has to be 9968282814
         */
-        $user->update(['Phone' => substr($AdldapUser->mobile[0],1)]);
-        $user->update(['email' => $AdldapUser->mail[0]]);
-        $user->save();
+
+        if(!$user){
+            $usr= New User();
+            $usr->name= $AdldapUser->mail[0];
+            $usr->email= $AdldapUser->mail[0];
+            $usr->cpf= $request->cpf;
+            $usr->location = 'not required';
+            $usr->password = bcrypt($request->password);
+            $usr->Phone = substr($AdldapUser->mobile[0],1);
+            $usr->save();
+        }
+        else{
+            $user->update(['Phone' => substr($AdldapUser->mobile[0],1)]);
+            $user->update(['email' => $AdldapUser->mail[0]]);
+            $user->save();
+        }    
     }
 }

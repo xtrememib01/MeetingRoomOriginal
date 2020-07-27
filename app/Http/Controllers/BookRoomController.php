@@ -54,8 +54,14 @@ class BookRoomController extends Controller
      */
     public function create()
     {
-            $locations= Locations::all();
-            return view('bookroom.create')->with('locations',$locations);
+            if (auth()->user()->user_type !== null){
+                $locations= Locations::all();
+                return view('bookroom.create')->with('locations',$locations); 
+            }
+            else{
+                return redirect('/')->with('error','Unauthrised territory');
+            }
+            
     }
 
     /**
