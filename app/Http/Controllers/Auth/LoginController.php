@@ -55,11 +55,11 @@ class LoginController extends Controller
     public function attemptLogin(Request $request) {
             //for testing purpose only when not in the ongc network
         
-            if($request->cpf='121757'){
-                $localUser = User::where('cpf', $request->cpf)->first();
-                Auth::login($localUser);
-                return true;
-            }
+            // if($request->cpf='121757'){
+            //     $localUser = User::where('cpf', $request->cpf)->first();
+            //     Auth::login($localUser);
+            //     return true;
+            // }
 
             $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
     
