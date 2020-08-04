@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Mail\email;
+use Illuminate\Support\Facades\Mail;
+use  Illuminate\Contracts\Mail\Mailable;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,10 +39,14 @@ Route::get('/events','BookRoomController@events');
 
 // Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
 
-Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
+// Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
+Route::get('/sendSms/{bookroom}', 'SmsController@smsOngc');
 
-Route::get('/sendSMS',function(){
-    return '123';
+
+
+Route::get('/email',function(){
+    // Mail::to('PAREVA_DURGESH@ongc.co.in')->send('');
+    Mail::to('PAREVA_DURGESH@ongc.co.in')->send(new mail());
     return view('sendSMS');
 });
 

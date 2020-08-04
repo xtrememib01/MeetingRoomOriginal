@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Locations;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Collection;
 
 
 class BookRoomController extends Controller
@@ -120,6 +122,7 @@ class BookRoomController extends Controller
     
     $brr->textArea = $request->textArea; 
     $brr->save();
+    $this->sendSMS($brr, 'SuperUser');
     return redirect ('\bookroom')->with('success','Entry created');
 }
 
@@ -193,6 +196,10 @@ class BookRoomController extends Controller
         }
         $br->save();
 
+        /*send the notification once a meeting is accepted to the Core team member
+        Currently durgesh and GPRAO sir*/
+        $this->sendSMS($br,'Accepted');
+    
         return view ('bookroom.index')
                                         ->with('success','Entry created')
                                         ->with('bookrooms',BookRoom::all());
@@ -206,7 +213,12 @@ class BookRoomController extends Controller
      */
     public function destroy(BookRoom $bookroom)
     {
+        if ($bookroom->status == 'Accepted'){
+            //send message to Core team + FPR and SPR of the locations
+            $this->sendSMS($bookroom, 'DeleteMeeting');
+        }
         $bookroom->delete();
+
         return redirect('\bookroom');
     }
 
@@ -259,41 +271,63 @@ class BookRoomController extends Controller
                  return false;
         }
 
-        public function smsOngc(BookRoom $bookroom){
-            
-            
-            $contact =array();
-            // $userPhone = $bookroom->user;
-            // return $userPhone->Phone;
-            $i= 0;
-            foreach($bookroom->shifts as $location){
-                //find all the first normal user and store them in an array ; Required to send each of them a text message
-                
-                try {
-                    if (\App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone!= null){
-                        $contact[] = \App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone;
-                    }     
-                }
-                catch (\Exception $e) {
-                    
-                }
-            }
-            
-            // return $contact;
+        // sendSMS($brr, 'SuperUser');
+        // public function sendSMS(BookRoom $bookroom, $to){
+        public function sendSMS(BookRoom $bookroom,$to){
+
             $contractString = null;
-            for($i=0;$i<count($contact);$i++){
-                if ($i==0){ $contractString = $contact[$i];}
-                else{$contractString = $contractString.'+'.$contact[$i];}
+            //Mesage sent to the accepting authority once a meeting is created by the FPR and the SPr
+            if($to == 'SuperUser'){
+                $contractString = \App\User::where('location',$bookroom->user->location)->where('user_type','Super')->first()->Phone;
+                $appendString = 'New+Meeting+Created+For+Approval';
             }
-           
+
+            //send message to FPR and SPR, once a meeting is accepting by the accpeting authority
+            if($to =='Accepted'){
+                $bookinglocation = $bookroom->user->location;
+                //get the colletion instance of the normal users of the location
+                $locationFPRSPR = \App\User::where('location', $bookinglocation)->where('user_type','Normal')->get();
+                //since there are only going to be 2 entries against a location
+                $FPRMobile = $locationFPRSPR->first()->Phone;
+                $SPRMobile = $locationFPRSPR->last()->Phone;
+                
+                // $contractString = '9968282814+'.$FPRMobile.'+'.$SPRMobile;
+                $contractString = $FPRMobile.'+'.$SPRMobile;
+                $appendString = 'Meeting+Approved';
+            }
+
+            
+            if ($to == 'DeleteMeeting' ){
+                $contact =array();
+                $i= 0;
+                foreach($bookroom->shifts as $location){
+                    try {
+                        if (\App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone!= null){
+                            $contact[] = \App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone;
+                        }     
+                    }
+                    catch (\Exception $e) {
+                    }
+                }
+                
+                for($i=0;$i<count($contact);$i++){
+                    if ($i==0){ $contractString = $contact[$i];}
+                    else{$contractString = $contractString.'+'.$contact[$i];}
+                }
+
+                    $contractString = '9968282814+'.$contractString;
+                    $appendString = 'Meeting+Cancelled';
+                }
+
+    
             $client = new \GuzzleHttp\Client();
-            // $client->request('GET', '/', ['proxy' => '8.8.8.8']);
-            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='.
-                $contractString.'&text=VC+Scheduled+on+'.
-                $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->conference_details.'&remLen=148&charset=UTF-8';
-            //return $url;
+            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='
+            .$contractString.'&text='.$appendString.'+of+VC+Scheduled+on+'.
+            // .$contractString.'&text=Accepted+Meeting+for+VC+Scheduled+on+'.
+
+            $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->conference_details.'&remLen=148&charset=UTF-8';
             $res = $client->request('GET', $url);
-            return redirect ('\bookroom')->with('success','message sent to all the participants');
-        }
+           } 
+    
 }
 

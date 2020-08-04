@@ -53,24 +53,13 @@ class LoginController extends Controller
     }
 
     public function attemptLogin(Request $request) {
-        /* find if the cpf of the user trying to log in matches with the CPF of the user existing in the tables
-       1.  if the user exist -> log in and save the data to the database in the user table
-       2.  if doesn't exist  -> redirect to the login page with the message unauthorised and
-       3.  in case of wrong userid and pass authenticate scaffolding should take care on its own
-        */
-        // $localUser = User::where('cpf', $request->cpf)->first();
+            //for testing purpose only when not in the ongc network
         
-        // if ($localUser){
-        //     $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
-        //     $userDn = $ldapUser->distinguishedname[0];
-        //     $this->saveUserData( $request);
-        //     if(Adldap::auth()->attempt($userDn, $request->password)) {
-        //         Auth::login($localUser);
-        //         return true;
-        //     }
-        // // }
-        //     return false;
-        // }
+            if($request->cpf='121757'){
+                $localUser = User::where('cpf', $request->cpf)->first();
+                Auth::login($localUser);
+                return true;
+            }
 
             $ldapUser = Adldap::search()->where('sAMAccountName', $request->cpf)->firstOrFail();
     
