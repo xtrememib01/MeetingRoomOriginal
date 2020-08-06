@@ -258,6 +258,7 @@ class BookRoomController extends Controller
         foreach ($locationsArray as $location) {
             // checks the date for individual locations.
             $queryBuild = Bookroom::where('shifts','like','%'.$location.'%')
+                                ->where('status','Accepted')
                                 ->where('date',$rDt)
                                 ->where('startTime','<', $rEt)
                                 ->Where('endTime','>',$rSt)
