@@ -64,7 +64,8 @@
                                     <option value="Cambay">Cambay</option>
                                     <option value="Chennai">Chennai</option>
                                     <option value="Dehradun">Dehradun</option>
-                                    <option value="Delhi">Delhi</option>
+                                    <option value="Delhi Scope Minar">Delhi Scope Minar</option>
+                                    <option value="DUB Conference Room">DUB Conference Room</option>
                                     <option value="Hazira">Hazira</option>
                                     <option value="Karaikal">Karaikal</option>
                                     <option value="Kakinada">Kakinada</option>

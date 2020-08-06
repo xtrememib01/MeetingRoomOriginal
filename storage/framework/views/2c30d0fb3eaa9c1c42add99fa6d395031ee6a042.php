@@ -6,7 +6,7 @@
         </div>
         
         
-        <?php if(auth()->user()->user_type !== Null): ?>
+        <?php if(auth()->user()->user_type !== null): ?>
             <div class="container">
                 <div class="card">
                     <img class="card-img-top" src="holder.js/100px180/" alt="">
@@ -31,7 +31,7 @@
         
     
   
-  <?php if(auth()->user()->user_type !== Null): ?>
+  <?php if(auth()->user()->user_type !== null): ?>
     <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
         <h3 class="mt-4 ml-4 text-center"><?php echo e(auth()->user()->name); ?>'s Dash Board</h3>
             <div class="col-12" >

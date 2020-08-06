@@ -30,7 +30,6 @@ Auth::routes();
 Route::get('/','BookRoomController@index');
 Route::get('/home','BookRoomController@index');
 
-
 Route::put('/bookroom', 'BookRoomController@update');
 
 Route::resource('/bookroom', 'BookRoomController');

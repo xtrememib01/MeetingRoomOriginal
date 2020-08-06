@@ -7,7 +7,7 @@
         </div>
         {{-- <div id="timer.js"></div> --}}
         
-        @if (auth()->user()->user_type !== Null)
+        @if (auth()->user()->user_type !== null)
             <div class="container">
                 <div class="card">
                     <img class="card-img-top" src="holder.js/100px180/" alt="">
@@ -32,7 +32,7 @@
         {{-- The entire code below is for the purpose of summary of total rooms created --}}
     {{-- {{-- uncomment from line 34 to 88  --}}
   {{--  --}}
-  @if (auth()->user()->user_type !== Null)
+  @if (auth()->user()->user_type !== null)
     <div class="container mt-6 ml-0 mr-0 pl-0 pr-0">
         <h3 class="mt-4 ml-4 text-center">{{auth()->user()->name}}'s Dash Board</h3>
             <div class="col-12" >

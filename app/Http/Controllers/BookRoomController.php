@@ -93,9 +93,8 @@ class BookRoomController extends Controller
         $rEt= $request->endTime;
 
         $check = $this->checkduplicateentry ($locationsArray, $br, $rDt, $rSt, $rEt);
-        print $check;
-           
-                if ($check ==true) {
+        // return $check;           
+                if ($check == "duplicate") {
                     return redirect ('\bookroom')->with('error','Duplicate entry can not be created. Check location with date and time');
                 }
                 else {
@@ -122,13 +121,14 @@ class BookRoomController extends Controller
     
     $brr->textArea = $request->textArea; 
     $brr->save();
+    // To be commented for the internet environment
     $this->sendSMS($brr, 'SuperUser');
     return redirect ('\bookroom')->with('success','Entry created');
 }
 
     /**
      * Display the specified resource.
-     *
+     *de
      * @param  \App\BookRoom  $bookRoom
      * @return \Illuminate\Http\Response
      */
@@ -194,10 +194,12 @@ class BookRoomController extends Controller
         if($request->status != null){
             $br->status=$request->status;
         }
+        //check the previous entry and compare the date and
         $br->save();
 
         /*send the notification once a meeting is accepted to the Core team member
         Currently durgesh and GPRAO sir*/
+        // To be commented for the internet environment
         $this->sendSMS($br,'Accepted');
     
         return view ('bookroom.index')
@@ -215,6 +217,7 @@ class BookRoomController extends Controller
     {
         if ($bookroom->status == 'Accepted'){
             //send message to Core team + FPR and SPR of the locations
+            // To be commented for the internet d
             $this->sendSMS($bookroom, 'DeleteMeeting');
         }
         $bookroom->delete();
@@ -250,30 +253,26 @@ class BookRoomController extends Controller
     }
 
 
-    public function checkduplicateentry ( $locationsArray,  $BookRoom, $rDt, $rSt, $rEt){
+    public function checkduplicateentry ( $locationsArray, $BookRoom, $rDt, $rSt, $rEt){
+        $test = null;
         foreach ($locationsArray as $location) {
             // checks the date for individual locations.
             $queryBuild = Bookroom::where('shifts','like','%'.$location.'%')
                                 ->where('date',$rDt)
-                                // ->orWhere(function($query) use($rSt,$rEt){
-                                //     $query->where('startTime','>', $rEt)
-                                //           ->Where('endTime','<',$rSt);})
-                                ->where('startTime','>', $rEt)
-                                ->Where('endTime','<',$rSt)
-                                ->count();
-
+                                ->where('startTime','<', $rEt)
+                                ->Where('endTime','>',$rSt)
+                                ->count();   
+            // $test = $location." ".$test." ".$queryBuild;
                 if ($queryBuild>0){
-                    print $queryBuild;
-                       return true;
+                       return "duplicate";
                     }
             }          
-                print $queryBuild;
-                 return false;
-        }
+                return "newEntry";
+    }
 
         // sendSMS($brr, 'SuperUser');
         // public function sendSMS(BookRoom $bookroom, $to){
-        public function sendSMS(BookRoom $bookroom,$to){
+    public function sendSMS(BookRoom $bookroom,$to){
 
             $contractString = null;
             //Mesage sent to the accepting authority once a meeting is created by the FPR and the SPr
@@ -291,7 +290,7 @@ class BookRoomController extends Controller
                 $FPRMobile = $locationFPRSPR->first()->Phone;
                 $SPRMobile = $locationFPRSPR->last()->Phone;
                 
-                // $contractString = '9968282814+'.$FPRMobile.'+'.$SPRMobile;
+                // $contractString = '9969225728+7042569800+9968282814+'.$FPRMobile.'+'.$SPRMobile;
                 $contractString = $FPRMobile.'+'.$SPRMobile;
                 $appendString = 'Meeting+Approved';
             }
