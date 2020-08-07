@@ -321,7 +321,9 @@ class BookRoomController extends Controller
 
     
             $client = new \GuzzleHttp\Client();
-            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='
+            // CIO and DKDHIRAJ sir added in the calling list
+            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to=7982969921+7982969921+'
+            // $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='
             .$contractString.'&text='.$appendString.'+of+VC+Scheduled+on+'.
             // .$contractString.'&text=Accepted+Meeting+for+VC+Scheduled+on+'.
 
