@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use Adldap\Laravel\Facades\Adldap;
+
 class RegisterController extends Controller
 {
     /*
@@ -39,7 +41,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        return "test";
     }
 
     /**
@@ -54,6 +55,10 @@ class RegisterController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'Phone' =>['required'],
+                
+                // new field added the same is also to be added in the fillable of the User.php
+                'cpf' => ['required'],
+                
                 'location' => ['required'],
                 'user_type' => ['required'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -71,6 +76,10 @@ class RegisterController extends Controller
             return User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
+            
+                // new field cpf added
+                'cpf' => $data['cpf'],                
+            
                 'Phone' =>$data['Phone'],
                 'location' => $data['location'],
                 'user_type' => $data['user_type'],

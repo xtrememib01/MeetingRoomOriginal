@@ -40,6 +40,49 @@
 
         </div>
 
+        <br>
+        <label for="platform">Platform</label>
+        <div>
+            <select id="platform" type="text" class="form-control <?php $__errorArgs = ['platform'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="platform" value="<?php echo e(old('platform')); ?>" autofocus>
+                <option value="none">None</option>
+                <option value="Corporate VC" selected>Corporate VC</option>
+                <option value="Lifesize">Lifesize</option>
+                <option value="MSTeams">MSTeams</option>
+                <option value="Webex">Webex</option>
+              </select>
+            <?php $__errorArgs = ['user_type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <span class="invalid-feedback" role="alert">
+                    <strong><?php echo e($message); ?></strong>
+                </span>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+        </div>
+        <br/>
+        <br/>
+
+        
+        <div class="form-group">
+            <label for="url">Meeting Link</label>
+            
+        <textarea class="form-control" id="url" name="url" rows="5"><?php echo e(old('url')); ?></textarea>
+        </div>
+        
+
+        <br/>
+        <br/>
         <button type="submit" class="btn btn-success width:100%">Submit</button>
         </form>
         <?php endif; ?>

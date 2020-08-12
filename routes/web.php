@@ -29,23 +29,20 @@ Auth::routes();
 
 Route::get('/','BookRoomController@index');
 Route::get('/home','BookRoomController@index');
-
 Route::put('/bookroom', 'BookRoomController@update');
-
+Route::get('/MeetingEntry/{bookroom}','BookRoomController@MeetingEntry');
+Route::get('sendEmail','BookRoomController@sendEmail');
+Route::get('/events','BookRoomController@events');
 Route::resource('/bookroom', 'BookRoomController');
 
-Route::get('/events','BookRoomController@events');
-
 // Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
-
 // Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
 Route::get('/sendSms/{bookroom}', 'SmsController@smsOngc');
-
-
 
 Route::get('/email',function(){
     // Mail::to('PAREVA_DURGESH@ongc.co.in')->send('');
     Mail::to('PAREVA_DURGESH@ongc.co.in')->send(new mail());
     return view('sendSMS');
 });
+
 

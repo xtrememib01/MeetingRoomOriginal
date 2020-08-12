@@ -113,13 +113,14 @@ class BookRoomController extends Controller
     $brr->shifts = $request->locations;
     $brr->agenda = $request->agenda;
     $brr->user_id = auth()->user()->id; 
+    $brr->platform= $request->platform;
+    $brr->url= $request->url;
     
     if(auth()->user()->user_type == 'God'){
         $brr->status = 'Accepted';    
     }
     else{$brr->status = 'pending';}
-    
-    $brr->textArea = $request->textArea; 
+
     $brr->save();
     // To be commented for the internet environment
     $this->sendSMS($brr, 'SuperUser');
@@ -191,19 +192,22 @@ class BookRoomController extends Controller
         $br->endTime = $request->endTime;
         $br->shifts = $request->locations;
         $br->agenda = $request->agenda;
+        $br->platform= $request->platform;
+        $br->url= $request->url;
+    
         if($request->status != null){
+             // To be commented for the internet environment
+             //  if the already meeting status is not accepted and request is for accepting, the message be sent
+             if($br->status !=='Accepted' && $request->status == 'Accepted'){
+                $this->sendSMS($br,'Accepted');
+            }
+            
             $br->status=$request->status;
         }
         //check the previous entry and compare the date and
         $br->save();
-
-        /*send the notification once a meeting is accepted to the Core team member
-        Currently durgesh and GPRAO sir*/
-        // To be commented for the internet environment
-        $this->sendSMS($br,'Accepted');
-    
         return view ('bookroom.index')
-                                        ->with('success','Entry created')
+                                        ->with('success','Entry updated')
                                         ->with('bookrooms',BookRoom::all());
     }
 
@@ -274,6 +278,7 @@ class BookRoomController extends Controller
         // sendSMS($brr, 'SuperUser');
         // public function sendSMS(BookRoom $bookroom, $to){
     public function sendSMS(BookRoom $bookroom,$to){
+            //Understood that there will be two users, FPR and SPR for all the loactions.
 
             $contractString = null;
             //Mesage sent to the accepting authority once a meeting is created by the FPR and the SPr
@@ -284,15 +289,42 @@ class BookRoomController extends Controller
 
             //send message to FPR and SPR, once a meeting is accepting by the accpeting authority
             if($to =='Accepted'){
+
                 $bookinglocation = $bookroom->user->location;
                 //get the colletion instance of the normal users of the location
-                $locationFPRSPR = \App\User::where('location', $bookinglocation)->where('user_type','Normal')->get();
-                //since there are only going to be 2 entries against a location
-                $FPRMobile = $locationFPRSPR->first()->Phone;
-                $SPRMobile = $locationFPRSPR->last()->Phone;
-                
-                // $contractString = '9969225728+7042569800+9968282814+'.$FPRMobile.'+'.$SPRMobile;
-                $contractString = $FPRMobile.'+'.$SPRMobile;
+                $locationNormalUsers = \App\User::where('location', $bookinglocation)->where('user_type','Normal')->get();
+                foreach ($locationNormalUsers as $user){
+                    if($contractString == null){$contractString = $user->Phone;}
+                    else{$contractString = $contractString.'+'.$user->Phone;}
+                }
+
+                //to send notification to all the cloud FPR and SPRs
+                if($bookroom->platform == "Lifesize"){
+                    $lifesizeUsers = \App\User::where('location', $bookinglocation)->where('user_type','Lifesize')->get();
+                    foreach ($lifesizeUsers as $user){
+                        if($contractString == null){$contractString = $user->Phone;}
+                        else{$contractString = $contractString.'+'.$user->Phone;}
+                    }
+                }
+
+                //to send notification to all the cloud FPR and SPRs
+                if($bookroom->platform == "Webex"){
+                    $webexUsers = \App\User::where('location', $bookinglocation)->where('user_type','Webex')->get();
+                    foreach ($webexUsers as $user){
+                        if($contractString == null){$contractString = $user->Phone;}
+                        else{$contractString = $contractString.'+'.$user->Phone;}
+                    }
+                }
+
+                //to send notification to all the cloud FPR and SPRs
+                if($bookroom->platform == "MSTeams"){
+                    $msTeamsUsers = \App\User::where('location', $bookinglocation)->where('user_type','MSTeams')->get();
+                    foreach ($msTeamsUsers as $user){
+                        if($contractString == null){$contractString = $user->Phone;}
+                        else{$contractString = $contractString.'+'.$user->Phone;}
+                    }
+                }
+            
                 $appendString = 'Meeting+Approved';
             }
 
@@ -301,12 +333,11 @@ class BookRoomController extends Controller
                 $contact =array();
                 $i= 0;
                 foreach($bookroom->shifts as $location){
-                    try {
-                        if (\App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone!= null){
-                            $contact[] = \App\User::all()->where('location',$location)->where('user_type','Normal')->first()->Phone;
-                        }     
-                    }
-                    catch (\Exception $e) {
+
+                    $locationAllUsers = \App\User::where('location', $location)->get();
+                    foreach ($locationAllUsers as $user){
+                        if($contractString == null){$contractString = $user->Phone;}
+                        else{$contractString = $contractString.'+'.$user->Phone;}
                     }
                 }
                 
@@ -319,17 +350,35 @@ class BookRoomController extends Controller
                     $appendString = 'Meeting+Cancelled';
                 }
 
-    
             $client = new \GuzzleHttp\Client();
-            // CIO and DKDHIRAJ sir added in the calling list
-            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to=7982969921+7982969921+'
-            // $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='
+            $url ='http://10.205.48.187:13013/cgi-bin/sendsms?username=ongc&password=ongc12&from=ONGC&to='
             .$contractString.'&text='.$appendString.'+of+VC+Scheduled+on+'.
-            // .$contractString.'&text=Accepted+Meeting+for+VC+Scheduled+on+'.
-
             $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->conference_details.'&remLen=148&charset=UTF-8';
             $res = $client->request('GET', $url);
-           } 
+           }
+           
+           public function sendEmail(){
+
+            $test="https://teams.microsoft.com/l/meetup-join/19%3ameeting_Mjg2Mzg2YzQtNTJhNi00NmM3LWJiNDktNGMyODNhMDVkNzhl%40thread.v2/0?context=%7b%22Tid%22%3a%2264dfbbdf-740c-4cf1-9662-5d49093a9830%22%2c%22Oid%22%3a%22e6b4f95a-3933-4499-9fa7-808f5cb8464b%22%7d";
+            $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+            /* this is a standard way of sending a mail to anyone
+            $beautymail->send('emails.welcome', [], function($message)*/
+            // To pass a varialbe the followingto be used
+            $beautymail->send('emails.welcome', ["test" =>$test], function($message) 
+            {
+                $message
+                    ->from('bar@example.com')
+                    ->to('PAREVA_DURGESH@ongc.co.in', 'John Smith')
+                    ->subject('Welcome!');
+            });
+        }
+
+        public function MeetingEntry(BookRoom $bookroom, Request $request){
+            $br = $bookroom;
+            $br->url = $request->url;
+            $br->save();
+            return redirect ('\bookroom')->with('success','Meeting link submitted successfully');
+        }
     
 }
 

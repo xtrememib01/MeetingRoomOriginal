@@ -1,4 +1,9 @@
 @extends('layouts.app')
+<script>
+    function meetingEntry(no){
+        document.getElementById('MeetingEntry'+no).style.display="block";
+    }
+</script>
 @section('content')
     @include('inc.messages')
     <div class="container">
@@ -7,10 +12,11 @@
         </div>
         {{-- <div id="timer.js"></div> --}}
         
-        @if (auth()->user()->user_type !== null)
+        {{-- Bookroom to be not avaialbe with the null/ webex/ lifesize / msteams user --}}
+        @if (auth()->user()->user_type !== null && auth()->user()->user_type !== "Webex" && auth()->user()->user_type !== "MSTeams" && auth()->user()->user_type !== "Lifesize")
             <div class="container">
                 <div class="card">
-                    <img class="card-img-top" src="holder.js/100px180/" alt="">
+                    {{-- <img class="card-img-top" src="holder.js/100px180/" alt=""> --}}
                     <div class="card-body ">
                         <a href="/bookroom/create">
                             <div class="row">
@@ -60,35 +66,25 @@
                         {{-- locations that are also accepted to be show and not just accepted --}}
                         @if(($bookroom->user_id == auth()->user()->id) || 
                         (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location))
-                
                             <tr>
-                                {{-- <td >{{$bookroom->conference_details}}</td> --}}
                                 <td>
                                     @foreach ($bookroom->shifts as $location) 
                                         {{$location}}<br><br>
-                                    @endforeach                                
+                                    @endforeach
                                 </td>
                                 <td>{{$bookroom->date}}</td>
                                 <td>{{$bookroom->startTime}}</td>
-                                {{-- <td>{{$bookroom->endTime}}</td> --}}
                                 <td>{{$bookroom->agenda}}</td>
                                 <td>{{$bookroom->status}}</td>
 
                 {{-- make the field editable when the user
                     1. The logged in User is self
                     2. When the logged in User is super, and belongs to the location made by the user ofthe location (i.e. Delhi user can crate booking for ahmedabad and the same has to be approved vy the super used of Delhi and not Ahd
-                    {{ $bookroom->user_id  }}{{auth()->user()->id}}{{auth()->user()->user_type}}{{auth()->user()->location}}{{$bookroom->user->location}} 
-                One to amy relation used for this --}}
-        
-
-                                {{-- @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accept') || 
-                                    (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)) 
-                                    <td><a href= "/bookroom/{{$bookroom->id}}/edit" class="btn btn-success no-hover">Edit</a></td> --}}
-                                <td>
-                                    <div class="d-inline-flex">
-                                        @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !='Accepted') || 
+                   --}}             <td>
+                                    <div class="d-inline-flex">{{--same user, super user and god user--}}
+                                        @if(($bookroom->user_id == auth()->user()->id && $bookroom->status !=='Accepted') || 
                                             (auth()->user()->user_type =="Super" && auth()->user()->location==$bookroom->user->location)||
-                                            auth()->user()->user_type=='God')
+                                             auth()->user()->user_type=='God')
                                 
                                             <button class="btn btn-success" style="border:none; margin-right:1em; width:5em; height:70%;">
                                                 <a class="text-white" href= "/bookroom/{{$bookroom->id}}/edit" style="height:50%;">Edit</a>
@@ -98,7 +94,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" onclick="return confirm('Sure to Delete')" class="btn btn-danger text-white" 
-                                                    style="border:none; margin-right:1em; width:5em; height:100%; " >Delete
+                                                        style="border:none; margin-right:1em; width:5em; height:100%; " >Delete
                                                     </button>
                                                 </form>
                                         @endif
@@ -114,18 +110,115 @@
                                         @endif     
                                     </div>
                                 </td> 
-                                <td>{{$bookroom->user->name}}</td>                         
+                                <td>{{$bookroom->user->name}}
+                                </td>                         
                             </tr>
                         @endif
                 @endforeach
                 
-                    
-            </tbody>
-                
-        </table>
-    </div>
+         
         
     </div>
+
+
+{{-- Below is for WEBEX user,--}}
+
+        @if(auth()->user()->user_type == "Webex")
+            @foreach($bookrooms as $bookroom)
+                @if($bookroom->platform == "Webex")
+                <tr>
+                    <td>@foreach ($bookroom->shifts as $location) {{$location}}<br><br>@endforeach</td>
+                    <td>{{$bookroom->date}}</td>
+                    <td>{{$bookroom->startTime}}</td>
+                    <td>{{$bookroom->agenda}}</td>
+                    <td>{{$bookroom->status}}</td>
+                    <td></td>
+                    <td>{{$bookroom->user->name}}
+                        {{-- ONly when a Webex user enter the meeting room and the meeting is accepted --}}
+                     @if(auth()->user()->user_type== "Webex" && $bookroom->status=="Accepted")
+                     <button onclick="meetingEntry({{$bookroom->id}})" class="btn btn-primary btn-sm text-white">Enter Meeting Room</button>
+                     @endif
+
+                        <br>
+                        <div id="MeetingEntry{{$bookroom->id}}" style="display:none">
+                            <form action="/MeetingEntry/{{$bookroom->id}}" method="GET">
+                                @csrf
+                                 <textarea name="url">{{$bookroom->url}}</textarea>
+                                    <button type="submit" class="btn btn-primary btn-sm text-white">Submit the link</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @endif
+            @endforeach
+        @endif     
+
+        {{-- Below is for Lifesize user,--}}
+        @if(auth()->user()->user_type == "Lifesize")
+        @foreach($bookrooms as $bookroom)
+            @if($bookroom->platform == "Lifesize")
+            <tr>
+                <td>@foreach ($bookroom->shifts as $location) {{$location}}<br><br>@endforeach</td>
+                <td>{{$bookroom->date}}</td>
+                <td>{{$bookroom->startTime}}</td>
+                <td>{{$bookroom->agenda}}</td>
+                <td>{{$bookroom->status}}</td>
+                <td></td>
+                <td>{{$bookroom->user->name}}
+                    <br>
+                    {{-- ONly when a Webex user enter the meeting room and the meeting is accepted --}}
+                 @if(auth()->user()->user_type== "Lifesize" && $bookroom->status=="Accepted")
+                 <button onclick="meetingEntry({{$bookroom->id}})" class="btn btn-primary btn-sm text-white">Enter Meeting Room</button>
+                 <br>
+                 @endif
+              {{--This is "MeetingEntry{{$bookroom->id is created for diff id no to each of the div which in turn is handled by the Javascript at the top}}"  --}}
+                    <div id="MeetingEntry{{$bookroom->id}}" style="display:none">
+                        <form action="/MeetingEntry/{{$bookroom->id}}" method="GET">
+                            @csrf
+                             <textarea name="url">{{$bookroom->url}}</textarea>
+                                <button type="submit" class="btn btn-primary btn-sm text-white">Submit the link</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            @endif
+        @endforeach
+    @endif     
+
+    {{-- Below is for MSTeams user,--}}
+
+    @if(auth()->user()->user_type == "MSTeams")
+    @foreach($bookrooms as $bookroom)
+        @if($bookroom->platform == "MSTeams")
+        <tr>
+            <td>@foreach ($bookroom->shifts as $location) {{$location}}<br><br>@endforeach</td>
+            <td>{{$bookroom->date}}</td>
+            <td>{{$bookroom->startTime}}</td>
+            <td>{{$bookroom->agenda}}</td>
+            <td>{{$bookroom->status}}</td>
+            <td></td>
+            <td>{{$bookroom->user->name}}
+                {{-- ONly when a Webex user enter the meeting room and the meeting is accepted --}}
+             @if(auth()->user()->user_type== "MSTeams" && $bookroom->status=="Accepted")
+             <button onclick="meetingEntry({{$bookroom->id}})" class="btn btn-primary btn-sm text-white">Enter Meeting Room</button>
+             @endif
+    
+                <div id="MeetingEntry{{$bookroom->id}}" style="display:none">
+                    <form action="/MeetingEntry/{{$bookroom->id}}" method="GET">
+                        @csrf
+                         <textarea name="url">{{$bookroom->url}}</textarea>
+                            <button type="submit" class="btn btn-primary btn-sm text-white">Submit</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        @endif
+    @endforeach
+@endif     
+    </tbody>
+                
+</table>
+</div>
     @endif
     
 @endsection

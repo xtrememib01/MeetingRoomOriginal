@@ -25,6 +25,8 @@ class CreateBookRoomsTable extends Migration
             $table->text('agenda');
             $table->integer('user_id')->nullable();
             $table->char('status')->nullable();
+            $table->char('platform')->nullable();
+            $table->text('url')->nullable();
             $table->timestamps();
         });
     }

@@ -23,7 +23,7 @@
             </div>
         </div>
            
-        @if (auth()->user()->user_type !== Null)
+        @if (auth()->user()->user_type !== null && auth()->user()->user_type !== "Webex" && auth()->user()->user_type !== "MSTeams" && auth()->user()->user_type !== "Lifesize")
             <div class="container">
                 <div class="card">
                     <img class="card-img-top" src="holder.js/100px180/" alt="">
@@ -55,7 +55,7 @@
                         <th>To</th>
                         <th style="width:15%">Agenda</th>
                         <th>Features</th>
-                        <th>Create by</th>
+                        <th>Created by</th>
                         {{-- <th>Edit</th>
                         <th> Delete</th> --}}
                 </thead>

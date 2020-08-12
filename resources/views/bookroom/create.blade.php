@@ -41,6 +41,35 @@
 
         </div>
 
+        <br>
+        <label for="platform">Platform</label>
+        <div>
+            <select id="platform" type="text" class="form-control @error('platform') is-invalid @enderror" name="platform" value="{{ old('platform') }}" autofocus>
+                <option value="none">None</option>
+                <option value="Corporate VC" selected>Corporate VC</option>
+                <option value="Lifesize">Lifesize</option>
+                <option value="MSTeams">MSTeams</option>
+                <option value="Webex">Webex</option>
+              </select>
+            @error('user_type')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+        <br/>
+        <br/>
+
+        {{-- @if($bookroom->user->user_type == 'Webex') --}}
+        <div class="form-group">
+            <label for="url">Meeting Link</label>
+            {{-- <input type="textArea" class="form-control" id="agenda" name="agenda" rows="5"> --}}
+        <textarea class="form-control" id="url" name="url" rows="5">{{old('url')}}</textarea>
+        </div>
+        {{-- @endif --}}
+
+        <br/>
+        <br/>
         <button type="submit" class="btn btn-success width:100%">Submit</button>
         </form>
         @endauth
