@@ -72,7 +72,10 @@
 
                             <div class="col-md-6">
                                 <select id="location" type="text" class="form-control @error('location') is-invalid @enderror" name="location" value="{{ old('location') }}" required autocomplete="location" autofocus>
-                                    <option value="Agartala" selected>Agartala</option>
+                                    @foreach(\App\Locations::all() as $location)
+                                    <option value={{$location->location}}>{{$location->location}}</option>
+                                    @endforeach
+                                    {{-- <option value="Agartala" selected>Agartala</option>
                                     <option value="Ahmedabad">Ahmedabad</option>
                                     <option value="Ankleshwar">Ankleshwar</option>
                                     <option value="Cambay">Cambay</option>
@@ -88,7 +91,7 @@
                                     <option value="Nazira">Nazira</option>
                                     <option value="Rajahmundry">Rajahmundry</option>
                                     <option value="Sivasagar">Sivasagar</option>
-                                    <option value="Vadodara">Vadodara</option>
+                                    <option value="Vadodara">Vadodara</option> --}}
                                 </select>
                                 @error('location')
                                     <span class="invalid-feedback" role="alert">
@@ -97,11 +100,12 @@
                                 @enderror
                             </div>
                         </div>
-
+{{--to be not selected by the users 
                         <div class="form-group row">
                             <label for="user_type" class="col-md-4 col-form-label text-md-right">{{ __('user_Type') }}</label>
 
-                            <div class="col-md-6">
+                            
+                                <div class="col-md-6">
                                 <select id="user_type" type="text" class="form-control @error('user_type') is-invalid @enderror" name="user_type" value="{{ old('user_type') }}" autofocus>
                                     <option value="Normal" selected>Normal</option>
                                     <option value="Super">Super</option>
@@ -115,8 +119,8 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
-                        </div>
+                            </div> 
+                        </div>--}}
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>

@@ -228,35 +228,7 @@ class BookRoomController extends Controller
 
         return redirect('\bookroom');
     }
-
-    public function insertANewLine(){
-        echo nl2br("\n");
-        
-    }
-
-    function events(){
-        $brs= BookRoom::all();
-        $event_array = [];
-        foreach($brs as $br){
-            if($br->status=='Accepted' || auth()->user()->user_type=='God'){
-            $event_object = [
-                'start' =>$br->date,
-                'title' =>$br->conference_details,
-                // 'title' =>'<?php echo <span style="color:red"> )'.$br->agenda.' </span>,
-                // 'title' =>$br->agenda.'   ('.$br->startTime.' to '.$br->endTime.')',
-                'url'   => '/bookroom/'.$br->id
-            ];
-            array_push($event_array,$event_object);
-        }
-        }
-        return $event_array;
-    }
-
-    public function lapupd(){
-        return view('sreenath-lapupd');
-    }
-
-
+  
     public function checkduplicateentry ( $locationsArray, $BookRoom, $rDt, $rSt, $rEt){
         $test = null;
         foreach ($locationsArray as $location) {
@@ -300,7 +272,7 @@ class BookRoomController extends Controller
 
                 //to send notification to all the cloud FPR and SPRs
                 if($bookroom->platform == "Lifesize"){
-                    $lifesizeUsers = \App\User::where('location', $bookinglocation)->where('user_type','Lifesize')->get();
+                    $lifesizeUsers = \App\User::where('user_type','Lifesize')->get();
                     foreach ($lifesizeUsers as $user){
                         if($contractString == null){$contractString = $user->Phone;}
                         else{$contractString = $contractString.'+'.$user->Phone;}
@@ -309,7 +281,7 @@ class BookRoomController extends Controller
 
                 //to send notification to all the cloud FPR and SPRs
                 if($bookroom->platform == "Webex"){
-                    $webexUsers = \App\User::where('location', $bookinglocation)->where('user_type','Webex')->get();
+                    $webexUsers = \App\User::where('user_type','Webex')->get();
                     foreach ($webexUsers as $user){
                         if($contractString == null){$contractString = $user->Phone;}
                         else{$contractString = $contractString.'+'.$user->Phone;}
@@ -318,7 +290,8 @@ class BookRoomController extends Controller
 
                 //to send notification to all the cloud FPR and SPRs
                 if($bookroom->platform == "MSTeams"){
-                    $msTeamsUsers = \App\User::where('location', $bookinglocation)->where('user_type','MSTeams')->get();
+                    // $msTeamsUsers = \App\User::where('location', $bookinglocation)->where('user_type','MSTeams')->get();
+                    $msTeamsUsers = \App\User::where('user_type','MSTeams')->get();
                     foreach ($msTeamsUsers as $user){
                         if($contractString == null){$contractString = $user->Phone;}
                         else{$contractString = $contractString.'+'.$user->Phone;}

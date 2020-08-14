@@ -60,7 +60,7 @@ class RegisterController extends Controller
                 'cpf' => ['required'],
                 
                 'location' => ['required'],
-                'user_type' => ['required'],
+                // 'user_type' => ['required'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
         }
@@ -82,7 +82,7 @@ class RegisterController extends Controller
             
                 'Phone' =>$data['Phone'],
                 'location' => $data['location'],
-                'user_type' => $data['user_type'],
+                // 'user_type' => $data['user_type'],
                 'password' => Hash::make($data['password']),
             ]);
         }

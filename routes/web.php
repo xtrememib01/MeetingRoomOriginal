@@ -32,7 +32,8 @@ Route::get('/home','BookRoomController@index');
 Route::put('/bookroom', 'BookRoomController@update');
 Route::get('/MeetingEntry/{bookroom}','BookRoomController@MeetingEntry');
 Route::get('sendEmail','BookRoomController@sendEmail');
-Route::get('/events','BookRoomController@events');
+Route::get('/events','HomeController@events');
+
 Route::resource('/bookroom', 'BookRoomController');
 
 // Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
