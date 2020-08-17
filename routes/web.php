@@ -38,7 +38,9 @@ Route::resource('/bookroom', 'BookRoomController');
 
 // Route::delete('/bookroom/{bookroom}', 'BookRoomController@destroy')->middleware(['auth', 'password.confirm']);
 // Route::get('/sendSms/{bookroom}', 'BookRoomController@smsOngc');
+
 Route::get('/sendSms/{bookroom}', 'SmsController@smsOngc');
+// Route::get('/sendSms/{bookroom}/{emails}', 'SmsController@smsOngc');
 
 Route::get('/email',function(){
     // Mail::to('PAREVA_DURGESH@ongc.co.in')->send('');

@@ -12,13 +12,11 @@ use Adldap\Laravel\Facades\Adldap;
 
 class SmsController extends Controller
 {
-    public function smsOngc(BookRoom $bookroom){
+    public function smsOngc(BookRoom $bookroom, Request $request){
         $contact =array();
         $contractString = null;
         $i= 0;
         foreach($bookroom->shifts as $location){
-
-
             $locationNormalUsers = \App\User::where('location', $location)->where('user_type','Normal')->get();
                 foreach ($locationNormalUsers as $user){
                     if($contractString == null){$contractString = $user->Phone;}
@@ -33,15 +31,26 @@ class SmsController extends Controller
             $bookroom->date.'+from+'.$bookroom->startTime.'+hrs+onwards+on+the+agenda+'.$bookroom->conference_details.'&remLen=148&charset=UTF-8';
         //return $url;
         $res = $client->request('GET', $url);
-        $this->sendEmail($bookroom);
+        $this->sendEmail($bookroom,$request);
         return redirect ('\bookroom')->with('success','message sent to all the participants');
     }
 
-    public function sendEmail(BookRoom $bookroom){
-        //Array of emails
-        foreach(\App\User::all()->where('location','Delhi Scope Minar') as $users){
-            $emailArray[] = $users->email;
+    public function sendEmail(BookRoom $bookroom, Request $request){
+       
+        $emailArray =array();
+        //create array from the comma separed textfield
+        $additionalEmail = explode(',',$request->addEMail);
+        foreach ($additionalEmail as $extraEmail){
+            $emailArray[] =$extraEmail;
         }
+        
+        foreach($bookroom->shifts as $location){
+            $locationUsers = \App\User::where('location', $location)->get();
+                foreach ($locationUsers as $user){
+                    $emailArray[] = $user->email;
+                }
+        }
+
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
        
         /* this is a standard way of sending a mail to anyone

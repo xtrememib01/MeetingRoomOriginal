@@ -2,6 +2,10 @@
     function meetingEntry(no){
         document.getElementById('MeetingEntry'+no).style.display="block";
     }
+
+    function addEmail(no){
+        document.getElementById('addEmail'+no).style.display="block";
+    }
 </script>
 <?php $__env->startSection('content'); ?>
     <?php echo $__env->make('inc.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -94,18 +98,30 @@
                                                 </form>
                                         <?php endif; ?>
                                     
+                                        
+
+
                                         <?php if(auth()->user()->user_type =='God' ||
                                             $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted'): ?>
-                                        
-                                            <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">
-                                                    <button class="btn btn-primary text-white"
+                                      
+
+                                            <button onclick="addEmail(<?php echo e($bookroom->id); ?>)" class="btn btn-primary btn-sm text-white">Add additional email recepients separated by comma</button>
+                                            </div>
+                                            
+                                            <form action="/sendSms/<?php echo e($bookroom->id); ?>" method="get">        
+                                                <button type ="submit" style="display:block" class="btn btn-primary text-white float-right"
                                                     style="border:none; margin-right:1em; width:5em; height:100%;">Invite
-                                                    </button>
+                                               </button>
+                                                <div id="addEmail<?php echo e($bookroom->id); ?>" style="display:none">                                                        
+                                                    <input type="text" style="width:3500% height:250%" name="addEMail">
+                                                </div>
                                             </form>
                                         <?php endif; ?>     
-                                    </div>
+
+                                    
                                 </td> 
-                                <td><?php echo e($bookroom->user->name); ?>
+                                <td>
+                                    <?php echo e($bookroom->user->name); ?>
 
                                 </td>                         
                             </tr>

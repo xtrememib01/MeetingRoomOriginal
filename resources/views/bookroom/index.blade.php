@@ -3,6 +3,10 @@
     function meetingEntry(no){
         document.getElementById('MeetingEntry'+no).style.display="block";
     }
+
+    function addEmail(no){
+        document.getElementById('addEmail'+no).style.display="block";
+    }
 </script>
 @section('content')
     @include('inc.messages')
@@ -99,7 +103,7 @@
                                                 </form>
                                         @endif
                                     
-                                        @if (auth()->user()->user_type =='God' ||
+                                        {{-- @if (auth()->user()->user_type =='God' ||
                                             $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted')
                                         
                                             <form action="/sendSms/{{$bookroom->id}}" method="get">
@@ -107,10 +111,30 @@
                                                     style="border:none; margin-right:1em; width:5em; height:100%;">Invite
                                                     </button>
                                             </form>
+                                        @endif      --}}
+
+
+                                        @if (auth()->user()->user_type =='God' ||
+                                            $bookroom->user_id == auth()->user()->id && auth()->user()->user_type == 'Normal' && $bookroom->status == 'Accepted')
+                                      
+
+                                            <button onclick="addEmail({{$bookroom->id}})" class="btn btn-primary btn-sm text-white">Add additional email recepients separated by comma</button>
+                                            </div>
+                                            
+                                            <form action="/sendSms/{{$bookroom->id}}" method="get">        
+                                                <button type ="submit" style="display:block" class="btn btn-primary text-white float-right"
+                                                    style="border:none; margin-right:1em; width:5em; height:100%;">Invite
+                                               </button>
+                                                <div id="addEmail{{$bookroom->id}}" style="display:none">                                                        
+                                                    <input type="text" style="width:3500% height:250%" name="addEMail">
+                                                </div>
+                                            </form>
                                         @endif     
-                                    </div>
+
+                                    {{-- </div> --}}
                                 </td> 
-                                <td>{{$bookroom->user->name}}
+                                <td>
+                                    {{$bookroom->user->name}}
                                 </td>                         
                             </tr>
                         @endif
